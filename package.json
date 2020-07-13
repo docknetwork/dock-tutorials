@@ -1,0 +1,22 @@
+{
+  "name": "dock-tutorials",
+  "version": "0.0.1",
+  "description": "Corresponding tutorial code for the Dock SDK tutorial series",
+  "type": "module",
+  "scripts": {
+    "start": "npx babel-node index.js",
+    "tutorial-01": "npx babel-node did.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.6",
+    "@babel/node": "^7.8.7",
+    "@babel/preset-env": "^7.9.6",
+    "babel-core": "^6.26.3"
+  },
+  "dependencies": {
+    "@docknetwork/sdk": "^0.0.5"
+  }
+}
