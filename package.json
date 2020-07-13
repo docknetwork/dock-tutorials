@@ -17,6 +17,6 @@
     "babel-core": "^6.26.3"
   },
   "dependencies": {
-    "@docknetwork/sdk": "^0.0.5"
+    "@docknetwork/sdk": "^0.1.3"
   }
 }
