@@ -2,7 +2,7 @@
 import dock from '@docknetwork/sdk';
 
 // Import some shared variables
-import { address, secretUri } from './shared-constants';
+import { address, secretUri } from '../shared-constants';
 
 async function connectToNode() {
   // Initialize the SDK and connect to the node

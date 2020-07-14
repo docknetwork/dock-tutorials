@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "npx babel-node index.js",
-    "tutorial-01": "npx babel-node tutorial-01.js"
+    "tutorial-01": "npx babel-node intro/index.js"
   },
   "author": "",
   "license": "ISC",
