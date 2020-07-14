@@ -52,6 +52,7 @@ async function writeDID() {
   // Create a key detail, controller being same as the DID
   const keyDetail = createKeyDetail(publicKey, dockDID);
   await dock.did.new(dockDID, keyDetail);
+  console.log('DID created!');
 }
 ```
 

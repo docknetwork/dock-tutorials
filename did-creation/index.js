@@ -45,6 +45,7 @@ async function writeDID() {
   // Create a key detail, controller being same as the DID
   const keyDetail = createKeyDetail(publicKey, dockDID);
   await dock.did.new(dockDID, keyDetail);
+  console.log('DID created!');
 }
 
 // Method to update the DID's key
@@ -60,6 +61,7 @@ async function updateDID() {
   const newController = randomAsHex(32);
   const [keyUpdate, signature] = await createSignedKeyUpdate(dock.did, dockDID, newPk, currentPair, newController);
   await dock.did.updateKey(keyUpdate, signature);
+  console.log('DID key updated!');
 }
 
 // Method to remove the DID from chain
@@ -68,6 +70,7 @@ async function removeDID() {
   const currentPair = dock.keyring.addFromUri(secondKeySeed, null, 'ed25519');
   const [didRemoval, signature] = await createSignedDidRemoval(dock.did, dockDID, currentPair);
   await dock.did.remove(didRemoval, signature);
+  console.log('DID removed!');
 }
 
 // Run!
