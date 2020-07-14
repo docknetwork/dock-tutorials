@@ -1,1 +1,1 @@
-import tutorial01 from './tutorial-01';
+import tutorial01 from 'intro/index';
