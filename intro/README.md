@@ -1,4 +1,3 @@
-TODO: rename from tutorial-01.md to a more descriptive name
 TOOD: include script and code at each point
 
 Intro
