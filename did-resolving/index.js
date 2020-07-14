@@ -17,6 +17,8 @@ import {
 // Import the dock resolver
 import {
   DockResolver,
+  UniversalResolver,
+  MultiResolver,
 } from '@docknetwork/sdk/resolver';
 
 // Import some shared variables
@@ -25,8 +27,13 @@ import { address, secretUri } from '../shared-constants';
 // DID will be generated randomly
 const dockDID = createNewDockDID();
 
+// Define an external DID to resolve
+const externalDID = 'did:github:gjgd';
+
 // Generate first key with this seed. The key type is Sr25519
 const keySeed = randomAsHex(32);
+
+const universalResolverUrl = 'https://uniresolver.io';
 
 // Method from intro tutorial to connect to a node
 async function connectToNode() {
@@ -51,17 +58,51 @@ async function writeDID() {
 // Method to resolve the dockDID from the chain
 async function resolveDIDOnChain(did) {
   const result = await dock.did.getDocument(did);
-  console.log('DID Document:', result);
+  console.log('DID Document:', did, result);
   return result;
 }
 
-// Method to resolve the dockDID from the chain
+// Helper method to resolve from any resolver
+async function resolve(resolver, did) {
+  const result = await resolver.resolve(did);
+  console.log('DID Document:', did, result);
+  return result;
+}
+
+// Method to resolve the dockDID using DockResolver
 async function resolveDIDWithResolver(did) {
+  console.log('Creating and resolving with a DockResolver');
   // Create a dock resolver instance
   const resolver = new DockResolver(dock);
-  const result = await resolver.resolve(did);
-  console.log('DID Document:', result);
-  return result;
+  await resolve(resolver, did);
+}
+
+// Method to resolve using the universal resolver
+async function resolveWithUniversalResolver(did) {
+  console.log('Creating and resolving with a UniversalResolver');
+  // Create a universal resolver instance, does not need an initialized SDK
+  const resolver = new UniversalResolver(universalResolverUrl);
+  await resolve(resolver, did);
+}
+
+// Method to resolve using the multi resolver
+async function resolveWithMultiResolver(did) {
+  console.log('Creating and resolving with a MultiResolver');
+
+  // Create a dock resolver for our chain
+  const dockResolver = new DockResolver(dock);
+
+  // Create a list of resolvers, did:dock would resolve to dockResolver
+  const resolvers = {
+    dock: dockResolver
+  };
+
+  // Create a universal resolver, used as a fallback if no resolver is found in the list
+  const uniResolver = new UniversalResolver(universalResolverUrl);
+
+  // Create the multi resolver, use it like any other
+  const resolver = new MultiResolver(resolvers, uniResolver);
+  await resolve(resolver, did);
 }
 
 async function main() {
@@ -69,6 +110,8 @@ async function main() {
   await writeDID();
   await resolveDIDOnChain(dockDID);
   await resolveDIDWithResolver(dockDID);
+  await resolveWithUniversalResolver(externalDID);
+  await resolveWithMultiResolver(dockDID);
   await dock.disconnect();
 }
 
