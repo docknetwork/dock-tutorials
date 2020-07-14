@@ -7,7 +7,7 @@ TODO: Explain what dock is
 Installation of the SDK is pretty simple, we use NPM and our source is also available at GitHub (links below). To install via NPM or Yarn, run either
 `npm install @docknetwork/sdk` or `yarn add @docknetwork/sdk` respectively. Once the package and dependencies are installed, you can import it like any ES6/CJS module. You can find the complete source at https://github.com/docknetwork/dock-tutorials
 
-# Usage
+# Imoorting
 In this tutorial series we will be using NodeJS with babel for ES6 support, however the same code should work in browsers too once it is transpiled. To begin with, we should import the Dock SDK. Importing the default reference will give us a DockAPI instance. With this we will communicate with the blockchain. You can also import the DockAPI class instanciate your own objects if you prefer. Simply do:
 ```
 // Import the dock SDK
@@ -26,6 +26,7 @@ export const address = 'ws://localhost:9944'; // Websocket address of your Dock 
 export const secretUri = '//Alice'; // Account secret in uri format, we will use Alice for local testing
 ```
 
+# Connecting to a node
 With the required packages and variables imported, we can go ahead and connect to our node. If you don't have a local testnet running alraedy, go to https://github.com/docknetwork/dock-substrate and follow the steps in the readme to start one. You could use the Dock testnet given a proper account with enough funds. First, create a method named `connectToNode` with an empty body for now:
 ```
 async function connectToNode() {
@@ -40,6 +41,7 @@ await dock.init({ address });
 console.log('Connected to the node and ready to go!');
 ```
 
+# Creating an account
 In order to write to the chain we will need to set an account. We can perform read operations with no account set, but for our purposes we will need one. Accounts can be generated using the `dock.keyring` object through multiple methods such as URI, memonic phrase and raw seeds. See the polkadot keyring documentation (https://polkadot.js.org/api/start/keyring.html) for more information.
 
 We will use our URI secret of `//Alice` which was imported from `shared-constants.js` to work with our local testnet. Add this code after `dock.init`:
