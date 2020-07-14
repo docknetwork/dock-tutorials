@@ -10,7 +10,7 @@ import {
 import ethr from 'ethr-did-resolver';
 
 // Infura's Ethereum provider for the main net
-const ethereumProviderConfig = {
+export const ethereumProviderConfig = {
   networks: [
     {
       name: 'mainnet',

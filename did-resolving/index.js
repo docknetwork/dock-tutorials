@@ -21,6 +21,9 @@ import {
   MultiResolver,
 } from '@docknetwork/sdk/resolver';
 
+// Import our custom resolver
+import EtherResolver, { ethereumProviderConfig } from './ethr-resolver';
+
 // Import some shared variables
 import { address, secretUri } from '../shared-constants';
 
@@ -105,6 +108,14 @@ async function resolveWithMultiResolver(did) {
   await resolve(resolver, did);
 }
 
+// Method to resolve a did using EtherResolver
+async function resolveDIDWithEthrResolver(did) {
+  console.log('Creating and resolving with a EtherResolver');
+  // Create a custom ethr resolver instance
+  const resolver = new EtherResolver(ethereumProviderConfig);
+  await resolve(resolver, did);
+}
+
 async function main() {
   await connectToNode();
   await writeDID();
@@ -112,6 +123,7 @@ async function main() {
   await resolveDIDWithResolver(dockDID);
   await resolveWithUniversalResolver(externalDID);
   await resolveWithMultiResolver(dockDID);
+  await resolveDIDWithEthrResolver('did:ethr:0xabcabc03e98e0dc2b855be647c39abe984193675');
   await dock.disconnect();
 }
 
