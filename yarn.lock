@@ -1791,6 +1791,11 @@ did-resolver@1.0.0:
   resolved "https://registry.yarnpkg.com/did-resolver/-/did-resolver-1.0.0.tgz#892bcffe66352b1360c928a23082a731c83ca7c3"
   integrity sha512-mgJG0oqlkG7jfRzW0yN9qKawp24M4thGFdfIaZI30SAJXhpkkjqbkRxqMZLJNwqXEM0cqFbXaiFDqnd9Q1UUaw==
 
+did-resolver@2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/did-resolver/-/did-resolver-2.0.1.tgz#7246318d163250818ba71d0ad27f216a0034bb0a"
+  integrity sha512-NomJQaRiu0izKFFerYGrca48YxWtMOtOoqG3JUTLJtET8n2T1i8WlQz500zesnioZWi5RVNsUS/eMQfRWy7bbg==
+
 did-resolver@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/did-resolver/-/did-resolver-1.1.0.tgz#27a63b6f2aa8dee3d622cd8b8b47360661e24f1e"
@@ -1960,10 +1965,26 @@ ethjs-contract@^0.1.9:
     ethjs-util "0.1.3"
     js-sha3 "0.5.5"
 
+ethjs-contract@^0.2.0:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/ethjs-contract/-/ethjs-contract-0.2.3.tgz#f113ced8ed1c9c635b0b7ec71901340b64e8cded"
+  integrity sha512-fKsHm57wxwHrZhVlD8AHU2lC2G3c1fmvoEz15BpqIkuGWiTbjuvrQo2Avc+3EQpSsTFWNdyxC0h1WKRcn5kkyQ==
+  dependencies:
+    babel-runtime "^6.26.0"
+    ethjs-abi "0.2.0"
+    ethjs-filter "0.1.8"
+    ethjs-util "0.1.3"
+    js-sha3 "0.5.5"
+
 ethjs-filter@0.1.5:
   version "0.1.5"
   resolved "https://registry.yarnpkg.com/ethjs-filter/-/ethjs-filter-0.1.5.tgz#0112af6017c24677e32b8fdeb20e6196019b7598"
   integrity sha1-ARKvYBfCRnfjK4/esg5hlgGbdZg=
+
+ethjs-filter@0.1.8:
+  version "0.1.8"
+  resolved "https://registry.yarnpkg.com/ethjs-filter/-/ethjs-filter-0.1.8.tgz#2b02726b820ed4dd3860614d185c0c0f7ed1747f"
+  integrity sha512-qTDPskDL2UadHwjvM8A+WG9HwM4/FoSY3p3rMJORkHltYcAuiQZd2otzOYKcL5w2Q3sbAkW/E3yt/FPFL/AVXA==
 
 ethjs-format@0.2.7:
   version "0.2.7"
@@ -2028,6 +2049,19 @@ ethr-did-resolver@^2.2.0:
     did-resolver "1.0.0"
     ethjs-abi "^0.2.1"
     ethjs-contract "^0.1.9"
+    ethjs-provider-http "^0.1.6"
+    ethjs-query "^0.3.5"
+    ethr-did-registry "^0.0.3"
+
+ethr-did-resolver@^2.3.2:
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/ethr-did-resolver/-/ethr-did-resolver-2.3.2.tgz#3bad2234d41e8e1159197686ada839169e601578"
+  integrity sha512-RrByu5/3CQwk6Nfh3iYiyyrQ5l3dhWbTzMjaNcBFYBkd+JPXqRygJmx19llSBCjgQRIMHU122QQK74NSioTjiw==
+  dependencies:
+    buffer "^5.1.0"
+    did-resolver "2.0.1"
+    ethjs-abi "^0.2.1"
+    ethjs-contract "^0.2.0"
     ethjs-provider-http "^0.1.6"
     ethjs-query "^0.3.5"
     ethr-did-registry "^0.0.3"
@@ -2739,20 +2773,8 @@ jsonld-signatures@^4.4.0:
     security-context "^4.0.0"
     serialize-error "^4.1.0"
 
-"jsonld-signatures@git+https://github.com/docknetwork/jsonld-signatures.git#avoid-extendContextLoader":
-  version "5.0.2-0"
-  resolved "git+https://github.com/docknetwork/jsonld-signatures.git#416082535cac1f0a2a36bd0b665faca5fc479584"
-  dependencies:
-    base64url "^3.0.1"
-    crypto-ld "^3.7.0"
-    jsonld "^2.0.2"
-    node-forge "^0.9.1"
-    security-context "^4.0.0"
-    serialize-error "^5.0.0"
-
 "jsonld-signatures@https://github.com/docknetwork/jsonld-signatures#avoid-extendContextLoader":
   version "5.0.2-0"
-  uid "416082535cac1f0a2a36bd0b665faca5fc479584"
   resolved "https://github.com/docknetwork/jsonld-signatures#416082535cac1f0a2a36bd0b665faca5fc479584"
   dependencies:
     base64url "^3.0.1"
@@ -4007,9 +4029,9 @@ v8flags@^3.1.1:
   dependencies:
     homedir-polyfill "^1.0.1"
 
-"vc-js@git+https://github.com/docknetwork/vc-js.git#avoid-extendContextLoader":
+"vc-js@https://github.com/docknetwork/vc-js#avoid-extendContextLoader":
   version "0.5.1-0"
-  resolved "git+https://github.com/docknetwork/vc-js.git#98ad8eac68bbc58ad26584dc8aae2ce710fcf320"
+  resolved "https://github.com/docknetwork/vc-js#98ad8eac68bbc58ad26584dc8aae2ce710fcf320"
   dependencies:
     commander "^2.20.3"
     credentials-context "^1.0.0"
