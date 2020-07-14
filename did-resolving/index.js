@@ -14,6 +14,11 @@ import {
   getPublicKeyFromKeyringPair,
 } from '@docknetwork/sdk/utils/misc';
 
+// Import the dock resolver
+import {
+  DockResolver,
+} from '@docknetwork/sdk/resolver';
+
 // Import some shared variables
 import { address, secretUri } from '../shared-constants';
 
@@ -44,8 +49,17 @@ async function writeDID() {
 }
 
 // Method to resolve the dockDID from the chain
-async function resolveDID(did) {
+async function resolveDIDOnChain(did) {
   const result = await dock.did.getDocument(did);
+  console.log('DID Document:', result);
+  return result;
+}
+
+// Method to resolve the dockDID from the chain
+async function resolveDIDWithResolver(did) {
+  // Create a dock resolver instance
+  const resolver = new DockResolver(dock);
+  const result = await resolver.resolve(did);
   console.log('DID Document:', result);
   return result;
 }
@@ -53,7 +67,8 @@ async function resolveDID(did) {
 async function main() {
   await connectToNode();
   await writeDID();
-  await resolveDID(dockDID);
+  await resolveDIDOnChain(dockDID);
+  await resolveDIDWithResolver(dockDID);
   await dock.disconnect();
 }
 
