@@ -6,7 +6,8 @@
   "scripts": {
     "start": "npx babel-node index.js",
     "tutorial-01": "npx babel-node intro/index.js",
-    "tutorial-02": "npx babel-node did-creation/index.js"
+    "tutorial-02": "npx babel-node did-creation/index.js",
+    "tutorial-03": "npx babel-node did-resolving/index.js"
   },
   "author": "",
   "license": "ISC",
