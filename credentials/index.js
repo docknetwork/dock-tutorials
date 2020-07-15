@@ -6,6 +6,24 @@ import { DockResolver } from '@docknetwork/sdk/resolver';
 import dock from '@docknetwork/sdk';
 import getKeyDoc from '@docknetwork/sdk/utils/vc/helpers';
 
+// Import some DID helper methods from the SDK
+import {
+  createNewDockDID,
+	createKeyDetail,
+  createSignedKeyUpdate,
+  createSignedDidRemoval,
+} from '@docknetwork/sdk/utils/did';
+
+import {
+  getPublicKeyFromKeyringPair,
+} from '@docknetwork/sdk/utils/misc';
+
+// Import some utils from Polkadot JS
+import { randomAsHex } from '@polkadot/util-crypto';
+
+// Import some shared variables
+import { address, secretUri } from '../shared-constants';
+
 // Import the example VC
 import exampleVC from './vc.json';
 
@@ -42,10 +60,26 @@ async function connectToNode() {
   console.log('Connected to the node and ready to go!');
 }
 
+// Register issuer DID
+async function registerIssuerDID() {
+  console.log('Registering issuer DID...');
+  const pair = dock.keyring.addFromUri(issuerSeed, null, 'ed25519');
+  const publicKey = getPublicKeyFromKeyringPair(pair);
+  const keyDetail = createKeyDetail(publicKey, issuerDID);
+  await dock.did.new(issuerDID, keyDetail);
+}
+
+// Method to sign the credential with given keypair
+async function signCredential() {
+  console.log('Issuer will sign the credential now');
+  const pair = dock.keyring.addFromUri(issuerSeed, null, 'ed25519');
+  const issuerKey = getKeyDoc(issuerDID, pair, 'Ed25519VerificationKey2018');
+  await credentialOne.sign(issuerKey);
+  console.log('Credential signed, verifying...');
+}
+
 // Run!
 async function main() {
-  await connectToNode();
-
   // We can try to verify this credential, but it will fail as it has no proof
   try {
     const result = await credentialOne.verify();
@@ -54,16 +88,12 @@ async function main() {
     console.log('credentialOne failed to verify', e)
   }
 
-  // // Register issuer DID
-  // console.log('Registering issuer DID...');
-  // const pair = dock.keyring.addFromUri(issuerSeed, null, 'ed25519');
-  // await registerNewDIDUsingPair(dock, issuerDID, pair);
+  // Connect to node and register issuer DID for signing
+  await connectToNode();
+  await registerIssuerDID();
 
   // Sign the credential to get the proof
-  console.log('Issuer will sign the credential now');
-  const issuerKey = getKeyDoc(issuerDID, dock.keyring.addFromUri(issuerSeed, null, 'ed25519'), 'Ed25519VerificationKey2018');
-  await credentialOne.sign(issuerKey);
-  console.log('Credential signed, verifying...');
+  await signCredential();
 
   // Create a resolver in order to lookup DIDs for verifying
   const resolver = new DockResolver(dock);
@@ -74,8 +104,12 @@ async function main() {
     compactProof: true,
   });
 
-
-  // TODO: sign/issue then verify and explain why one fails and other doesnt
+  // Check verification result, if all is correct we should be valid
+  if (verifyResult.verified) {
+    console.log('Verified!', verifyResult)
+  } else {
+    console.error('Failed verification!', verifyResult)
+  }
 }
 
 main()
