@@ -25,7 +25,7 @@ import { randomAsHex } from '@polkadot/util-crypto';
 import { address, secretUri } from '../shared-constants';
 
 // Import the example VC
-import exampleVC from './vc.json';
+import exampleVC from '../example-vc.json';
 
 // Create a credential from a JSON object
 const credentialOne = VerifiableCredential.fromJSON(exampleVC);
