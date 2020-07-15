@@ -2,8 +2,8 @@
 import VerifiableCredential from '@docknetwork/sdk/verifiable-credential';
 
 // Import the dock SDK and resolver
-import { DockResolver } from '@docknetwork/sdk/resolver';
 import dock from '@docknetwork/sdk';
+import { DockResolver } from '@docknetwork/sdk/resolver';
 import getKeyDoc from '@docknetwork/sdk/utils/vc/helpers';
 
 // Import some DID helper methods from the SDK
