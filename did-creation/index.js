@@ -7,7 +7,7 @@ import dock from '@docknetwork/sdk';
 // Import some helper methods from the SDK
 import {
   createNewDockDID,
-	createKeyDetail,
+  createKeyDetail,
   createSignedKeyUpdate,
   createSignedDidRemoval,
 } from '@docknetwork/sdk/utils/did';
@@ -30,9 +30,9 @@ const secondKeySeed = randomAsHex(32);
 
 // Method from intro tutorial to connect to a node
 async function connectToNode() {
-	await dock.init({ address });
-	const account = dock.keyring.addFromUri(secretUri);
-	dock.setAccount(account);
+  await dock.init({ address });
+  const account = dock.keyring.addFromUri(secretUri);
+  dock.setAccount(account);
   console.log('Connected to the node and ready to go!');
 }
 

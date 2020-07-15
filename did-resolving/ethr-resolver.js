@@ -4,7 +4,7 @@ import {
 } from '@docknetwork/sdk/resolver';
 
 import {
-  NoDIDError
+  NoDIDError,
 } from '@docknetwork/sdk/utils/did';
 
 import ethr from 'ethr-did-resolver';

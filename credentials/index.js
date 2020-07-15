@@ -9,7 +9,7 @@ import getKeyDoc from '@docknetwork/sdk/utils/vc/helpers';
 // Import some DID helper methods from the SDK
 import {
   createNewDockDID,
-	createKeyDetail,
+  createKeyDetail,
   createSignedKeyUpdate,
   createSignedDidRemoval,
 } from '@docknetwork/sdk/utils/did';
@@ -42,9 +42,9 @@ const credentialExpirationDate = '2021-03-18T19:23:24Z';
 const credentialTwo = new VerifiableCredential(credentialId);
 credentialTwo
   .addType(credentialType)
-	.addSubject(credentialSubject)
-	.setIssuanceDate(credentialIssuanceDate)
-	.setExpirationDate(credentialExpirationDate);
+  .addSubject(credentialSubject)
+  .setIssuanceDate(credentialIssuanceDate)
+  .setExpirationDate(credentialExpirationDate);
 
 console.log('Credential created:', credentialTwo.toJSON());
 
@@ -54,9 +54,9 @@ const issuerSeed = randomAsHex(32);
 
 // Method from intro tutorial to connect to a node
 async function connectToNode() {
-	await dock.init({ address });
-	const account = dock.keyring.addFromUri(secretUri);
-	dock.setAccount(account);
+  await dock.init({ address });
+  const account = dock.keyring.addFromUri(secretUri);
+  dock.setAccount(account);
   console.log('Connected to the node and ready to go!');
 }
 
@@ -85,7 +85,7 @@ async function main() {
     const result = await credentialOne.verify();
     console.log('credentialOne verified', result);
   } catch (e) {
-    console.log('credentialOne failed to verify', e)
+    console.log('credentialOne failed to verify', e);
   }
 
   // Connect to node and register issuer DID for signing
@@ -106,9 +106,9 @@ async function main() {
 
   // Check verification result, if all is correct we should be valid
   if (verifyResult.verified) {
-    console.log('Verified!', verifyResult)
+    console.log('Verified!', verifyResult);
   } else {
-    console.error('Failed verification!', verifyResult)
+    console.error('Failed verification!', verifyResult);
   }
 }
 

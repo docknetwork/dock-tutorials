@@ -7,7 +7,7 @@ import dock from '@docknetwork/sdk';
 // Import some helper methods from the SDK
 import {
   createNewDockDID,
-	createKeyDetail,
+  createKeyDetail,
 } from '@docknetwork/sdk/utils/did';
 
 import {
@@ -40,9 +40,9 @@ const universalResolverUrl = 'https://uniresolver.io';
 
 // Method from intro tutorial to connect to a node
 async function connectToNode() {
-	await dock.init({ address });
-	const account = dock.keyring.addFromUri(secretUri);
-	dock.setAccount(account);
+  await dock.init({ address });
+  const account = dock.keyring.addFromUri(secretUri);
+  dock.setAccount(account);
   console.log('Connected to the node and ready to go!');
 }
 
@@ -97,7 +97,7 @@ async function resolveWithMultiResolver(did) {
 
   // Create a list of resolvers, did:dock would resolve to dockResolver
   const resolvers = {
-    dock: dockResolver
+    dock: dockResolver,
   };
 
   // Create a universal resolver, used as a fallback if no resolver is found in the list
