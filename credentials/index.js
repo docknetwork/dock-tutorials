@@ -10,8 +10,6 @@ import getKeyDoc from '@docknetwork/sdk/utils/vc/helpers';
 import {
   createNewDockDID,
   createKeyDetail,
-  createSignedKeyUpdate,
-  createSignedDidRemoval,
 } from '@docknetwork/sdk/utils/did';
 
 import {

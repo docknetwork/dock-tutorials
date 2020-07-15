@@ -1,2 +1,2 @@
-import tutorial01 from 'intro/index';
-import tutorial02 from 'did-creation/index';
+import tutorial01 from './intro/index'; // eslint-disable-line
+import tutorial02 from './did-creation/index'; // eslint-disable-line
