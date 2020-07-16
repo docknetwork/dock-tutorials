@@ -22,20 +22,21 @@ async function connectToNode() {
   console.log('Connected to the node and ready to go!');
 }
 
-async function writeAndReadBlob(dock, blobValue, dockDID, pair) {
+async function writeBlob(blobValue, pair) {
+  // Create a random blob ID for writing to chain
   const blobId = randomAsHex(DockBlobIdByteSize);
   console.log('Writing blob with id ', blobId, 'and value', blobValue);
 
-  const blob = {
+  await dock.blob.new({
     id: blobId,
     blob: blobValue,
     author: getHexIdentifierFromDID(dockDID),
-  };
+  }, pair);
 
-  await dock.blob.new(blob, pair);
+  return blobId;
+}
 
-  console.log('Blob written, reading from chain...');
-
+async function readBlob(blobId) {
   const chainBlob = await dock.blob.get(blobId);
   return chainBlob;
 }
@@ -58,13 +59,15 @@ async function main() {
 
   // Write blob as string
   const blobValue = stringToHex('hello world');
-  const chainBlob = await writeAndReadBlob(dock, blobValue, dockDID, pair);
+  const blobId = await writeBlob(blobValue, pair);
+  const chainBlob = readBlob(blobId);
   const blobStrFromChain = u8aToString(chainBlob[1]);
   console.log('Resulting blob string from chain:', blobStrFromChain);
 
   // Write blob as array
   const blobValueArray = [1, 2, 3];
-  const chainBlobArray = await writeAndReadBlob(dock, blobValueArray, dockDID, pair);
+  const blobIdArray = await writeBlob(blobValueArray, pair);
+  const chainBlobArray = await readBlob(blobIdArray);
   const blobArrayFromChain = chainBlobArray[1];
   console.log('Resulting blob array from chain:', blobArrayFromChain);
 }
