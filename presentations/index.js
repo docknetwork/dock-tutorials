@@ -34,6 +34,9 @@ console.log('Credential created:', credential.toJSON());
 const issuerDID = createNewDockDID();
 const issuerSeed = randomAsHex(32);
 
+// Set a presentation ID
+const presentationId = 'http://example.edu/credentials/2803';
+
 // Method from intro tutorial to connect to a node
 async function connectToNode() {
   await dock.init({ address });
@@ -67,12 +70,32 @@ async function main() {
   await registerIssuerDID();
   await signCredential();
 
-  // Verify the credential
-  // TODO: verify presentation
   const resolver = new DockResolver(dock);
-  const verifyResult = await credential.verify({
+
+  // Create presentation and add credential
+	const presentation = new VerifiablePresentation(presentationId);
+
+  // You can add as many credentials as needed,
+  // we will use just one here
+  presentation.addCredential(credential);
+
+  // Set a challenge and domain to sign with
+  const challenge = randomAsHex(32);
+  const domain = 'example domain';
+
+  // Get holder keydoc and sign the presentation
+  // in this example holder and issuer are the same DID but they can differ
+  console.log('Holder will sign the presentation now...');
+  const holderKey = getKeyDoc(issuerDID, dock.keyring.addFromUri(issuerSeed, null, 'ed25519'), 'Ed25519VerificationKey2018');
+  await presentation.sign(holderKey, challenge, domain, resolver);
+  console.log('Signed presentation', presentation.toJSON());
+
+  // Verify the presentation
+  const verifyResult = await presentation.verify({
     resolver,
     compactProof: true,
+    challenge,
+    domain,
   });
 
   // Check verification result, if all is correct we should be valid
