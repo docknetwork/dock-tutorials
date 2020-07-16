@@ -1,3 +1,4 @@
+// TODO: cleanup and comment this file
 import { randomAsHex } from '@polkadot/util-crypto';
 import { u8aToString, stringToHex } from '@polkadot/util';
 
@@ -10,7 +11,7 @@ import { getPublicKeyFromKeyringPair } from '@docknetwork/sdk/utils/misc';
 // Import some shared variables
 import { address, secretUri } from '../shared-constants';
 
-  // Generate a DID to be used as author
+// Generate a DID to be used as author
 const dockDID = createNewDockDID();
 
 // Method from intro tutorial to connect to a node
