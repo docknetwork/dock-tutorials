@@ -25,7 +25,6 @@ import exampleVC from '../example-vc.json';
 
 // Create a credential from a JSON object
 const credential = VerifiableCredential.fromJSON(exampleVC);
-console.log('Credential created:', credential.toJSON());
 
 // TODO: set credential status
 
@@ -102,8 +101,10 @@ async function main() {
   // set a credential status object within the VC. The verifier will check
   // the revocation registry based on the credential status. We use a helper method
   // to build a dock credential status
+  // TODO: explain what buildDockCredentialStatus does
   const credentialStatus = buildDockCredentialStatus(registryId);
   credential.setStatus(credentialStatus);
+  console.log('Credential created:', credential.toJSON());
 
   // Sign credential, for this example we use controller as issuer
   await signCredential();
@@ -122,14 +123,14 @@ async function main() {
 
   // Verify the credential, it should succeed
   const resultBeforeRevocation = await credential.verify(verifyParams);
-  console.log('Credential verified before revocation: ', resultBeforeRevocation.verified)
+  console.log('Before revocation: ', resultBeforeRevocation)
 
   // Revoke the credential, next verify attempt will fail
   await revoke();
 
   // Verify the credential, it should fail
   const resultAfterRevocation = await credential.verify(verifyParams);
-  console.log('Credential verified after revocation: ', resultAfterRevocation.verified)
+  console.log('After revocation: ', resultAfterRevocation)
 
   // Disconnect from the node
   await dock.disconnect();
