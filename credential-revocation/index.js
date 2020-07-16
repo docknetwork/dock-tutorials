@@ -2,7 +2,15 @@ import { randomAsHex } from '@polkadot/util-crypto';
 
 import dock from '@docknetwork/sdk';
 import { createNewDockDID, createKeyDetail } from '@docknetwork/sdk/utils/did';
+import { buildDockCredentialStatus } from '@docknetwork/sdk/utils/vc';
 import { getPublicKeyFromKeyringPair } from '@docknetwork/sdk/utils/misc';
+import VerifiableCredential from '@docknetwork/sdk/verifiable-credential';
+import { DockResolver } from '@docknetwork/sdk/resolver';
+import getKeyDoc from '@docknetwork/sdk/utils/vc/helpers';
+
+import {
+  getDockRevIdFromCredential
+} from '@docknetwork/sdk/utils/vc';
 
 import {
   OneOfPolicy,
@@ -11,6 +19,15 @@ import {
 
 // Import some shared variables
 import { address, secretUri } from '../shared-constants';
+
+// Import the example VC
+import exampleVC from '../example-vc.json';
+
+// Create a credential from a JSON object
+const credential = VerifiableCredential.fromJSON(exampleVC);
+console.log('Credential created:', credential.toJSON());
+
+// TODO: set credential status
 
 // Create a random registry id
 const registryId = createRandomRegistryId();
@@ -30,10 +47,6 @@ controllers.add(controllerDID);
 // TODO: comment and explain this further
 const policy = new OneOfPolicy(controllers);
 
-// Create revoke IDs
-// TODO: explain what are revoke IDs, how they relate to credentials in next tutorial
-const revokeId = randomAsHex(32);
-
 // Method from intro tutorial to connect to a node
 async function connectToNode() {
   await dock.init({ address });
@@ -49,21 +62,8 @@ async function createRegistry() {
   console.log('Created registry');
 }
 
-async function removeRegistry() {
-  console.log('Removing registry...');
-
-  const lastModified = await dock.revocation.getBlockNoForLastChangeToRegistry(registryId);
-  await dock.revocation.removeRegistry(registryId, lastModified, didKeys);
-
-  console.log('Registry removed. All done.');
-}
-
-async function unrevoke() {
-  console.log('Trying to undo the revocation (unrevoke) of id:', revokeId);
-  await dock.revocation.unrevokeCredential(didKeys, registryId, revokeId);
-}
-
 async function revoke() {
+  const revokeId = getDockRevIdFromCredential(credential);
   console.log('Trying to revoke id:', revokeId);
   await dock.revocation.revokeCredential(didKeys, registryId, revokeId);
 }
@@ -71,10 +71,8 @@ async function revoke() {
 async function createControllerDID() {
   console.log(`Creating controller DID (${controllerDID}) using sr25519 pair from seed (${controllerSeed})...`);
 
-  // Get keypair from controller seed
+  // Get/ste keypair from controller seed
   const pair = dock.keyring.addFromUri(controllerSeed, null, 'sr25519');
-
-  // Set our controller DID and associated keypair to be used for generating proof
   didKeys.set(controllerDID, pair);
 
   // The controller is same as the DID
@@ -83,41 +81,55 @@ async function createControllerDID() {
   await dock.did.new(controllerDID, keyDetail);
 }
 
+// Method to sign the credential with given keypair
+async function signCredential() {
+  console.log('Issuer will sign the credential now');
+  const pair = dock.keyring.addFromUri(controllerSeed, null, 'sr25519');
+  const issuerKey = getKeyDoc(controllerDID, pair, 'Sr25519VerificationKey2020');
+  await credential.sign(issuerKey);
+  console.log('Credential signed, verifying...');
+}
+
 async function main() {
   // Connect to the node
   await connectToNode();
 
-  // We now need to create at least one controller DID
-  // The DID should be written before creating a registry
+  // Create controller DID and registry
   await createControllerDID();
-
-  // Create a revocation registry
   await createRegistry();
 
-  // Revoke
+  // In order for revocation to work with credentials, we need to
+  // set a credential status object within the VC. The verifier will check
+  // the revocation registry based on the credential status. We use a helper method
+  // to build a dock credential status
+  const credentialStatus = buildDockCredentialStatus(registryId);
+  credential.setStatus(credentialStatus);
+
+  // Sign credential, for this example we use controller as issuer
+  await signCredential();
+
+  // Create a resolver in order to lookup DIDs for verifying
+  const resolver = new DockResolver(dock);
+
+  // Construct arguments for verifying
+  // TODO: explain each param
+  const verifyParams = {
+    resolver,
+    compactProof: true,
+    forceRevocationCheck: true,
+    revocationApi: { dock }
+  };
+
+  // Verify the credential, it should succeed
+  const resultBeforeRevocation = await credential.verify(verifyParams);
+  console.log('Credential verified before revocation: ', resultBeforeRevocation.verified)
+
+  // Revoke the credential, next verify attempt will fail
   await revoke();
 
-  // Check if revocation was a sucess
-  const isRevoked = await dock.revocation.getIsRevoked(registryId, revokeId);
-  if (isRevoked) {
-    console.log('Revocation success. Trying to unrevoke...');
-
-    // Try to unrevoke
-    await unrevoke();
-
-    // Check if unrevoke worked
-    const isUnrevoked = !(await dock.revocation.getIsRevoked(registryId, revokeId));
-    if (isUnrevoked) {
-      console.log('Unrevoke success!');
-    } else {
-      console.error('Unable to unrevoke, something went wrong.');
-    }
-  } else {
-    console.error('Revocation failed');
-  }
-
-  // Cleanup, remove the registry
-  await removeRegistry();
+  // Verify the credential, it should fail
+  const resultAfterRevocation = await credential.verify(verifyParams);
+  console.log('Credential verified after revocation: ', resultAfterRevocation.verified)
 
   // Disconnect from the node
   await dock.disconnect();
