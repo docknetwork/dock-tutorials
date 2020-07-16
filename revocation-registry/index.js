@@ -94,6 +94,8 @@ async function main() {
   // Create a revocation registry
   await createRegistry();
 
+  // TODO: Reading revocation registry details
+
   // Revoke
   await revoke();
 
