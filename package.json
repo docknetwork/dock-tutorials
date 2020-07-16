@@ -10,7 +10,8 @@
     "tutorial-02": "npx babel-node did-creation/index.js",
     "tutorial-03": "npx babel-node did-resolving/index.js",
     "tutorial-04": "npx babel-node credentials/index.js",
-    "tutorial-05": "npx babel-node presentations/index.js"
+    "tutorial-05": "npx babel-node presentations/index.js",
+    "tutorial-06": "npx babel-node revocation-registry/index.js"
   },
   "author": "",
   "license": "ISC",
