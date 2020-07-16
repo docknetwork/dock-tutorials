@@ -94,7 +94,9 @@ async function main() {
   // Create a revocation registry
   await createRegistry();
 
-  // TODO: Reading revocation registry details
+  // Read the revocation registry details to confirm its written to chain
+  const detail = await dock.revocation.getRegistryDetail(registryId);
+  console.log('Registry detail:', detail);
 
   // Revoke
   await revoke();
