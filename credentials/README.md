@@ -1,3 +1,5 @@
+TODO: show in steps of just building, to signing and then to verifying
+
 ```
 // Import the VerifiableCredential object
 import VerifiableCredential from '@docknetwork/sdk/verifiable-credential';
