@@ -1,4 +1,4 @@
-// TODO: cleanup and comment this file
+// Import some helper methods from polkadot utilities
 import { randomAsHex } from '@polkadot/util-crypto';
 import { u8aToString, stringToHex } from '@polkadot/util';
 
@@ -24,21 +24,17 @@ async function connectToNode() {
 
 async function writeBlob(blobValue, pair) {
   // Create a random blob ID for writing to chain
-  const blobId = randomAsHex(DockBlobIdByteSize);
-  console.log('Writing blob with id ', blobId, 'and value', blobValue);
+  const id = randomAsHex(DockBlobIdByteSize);
+  console.log('Writing blob with id ', id, 'and value', blobValue);
 
+  // Submit blob new transaction with id, value and author
   await dock.blob.new({
-    id: blobId,
+    id,
     blob: blobValue,
     author: getHexIdentifierFromDID(dockDID),
   }, pair);
 
-  return blobId;
-}
-
-async function readBlob(blobId) {
-  const chainBlob = await dock.blob.get(blobId);
-  return chainBlob;
+  return id;
 }
 
 async function writeAuthorDID(pair) {
@@ -60,14 +56,14 @@ async function main() {
   // Write blob as string
   const blobValue = stringToHex('hello world');
   const blobId = await writeBlob(blobValue, pair);
-  const chainBlob = readBlob(blobId);
+  const chainBlob = await dock.blob.get(blobId);
   const blobStrFromChain = u8aToString(chainBlob[1]);
   console.log('Resulting blob string from chain:', blobStrFromChain);
 
   // Write blob as array
   const blobValueArray = [1, 2, 3];
   const blobIdArray = await writeBlob(blobValueArray, pair);
-  const chainBlobArray = await readBlob(blobIdArray);
+  const chainBlobArray = await dock.blob.get(blobIdArray);
   const blobArrayFromChain = chainBlobArray[1];
   console.log('Resulting blob array from chain:', blobArrayFromChain);
 }
