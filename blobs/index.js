@@ -1,6 +1,6 @@
 // Import some helper methods from polkadot utilities
 import { randomAsHex } from '@polkadot/util-crypto';
-import { u8aToString, stringToHex } from '@polkadot/util';
+import { u8aToString } from '@polkadot/util';
 
 // Import the dock SDK and resolver
 import dock from '@docknetwork/sdk';
@@ -54,7 +54,7 @@ async function main() {
   await writeAuthorDID(pair);
 
   // Write blob as string
-  const blobValue = stringToHex('hello world');
+  const blobValue = 'hello world';
   const blobId = await writeBlob(blobValue, pair);
   const chainBlob = await dock.blob.get(blobId);
   const blobStrFromChain = u8aToString(chainBlob[1]);
@@ -66,6 +66,15 @@ async function main() {
   const chainBlobArray = await dock.blob.get(blobIdArray);
   const blobArrayFromChain = chainBlobArray[1];
   console.log('Resulting blob array from chain:', blobArrayFromChain);
+
+  // Write blob as JSON
+  const blobValueJSON = {
+    myJsonObject: 'hello!'
+  };
+  const blobIdJSON = await writeBlob(blobValueJSON, pair);
+  const chainBlobJSON = await dock.blob.get(blobIdJSON);
+  const blobJSONfromChain = chainBlobJSON[1];
+  console.log('Resulting blob JSON from chain:', blobJSONfromChain);
 }
 
 main()

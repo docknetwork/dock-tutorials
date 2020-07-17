@@ -44,9 +44,9 @@ import { createNewDockDID, createKeyDetail, getHexIdentifierFromDID } from '@doc
 import { getPublicKeyFromKeyringPair } from '@docknetwork/sdk/utils/misc';
 ```
 
-We will also import some additional Polkadot helper methods to convert strings for blob storage. (TODO: IDEA: maybe we can remove need for this, and only use it internally for blob new and get. we can detect if value type is raw string and convert it)
+We will also need to import an additional Polkadot helper method to convert a Uint8 Array back to a string for this example.
 ```
-import { u8aToString, stringToHex } from '@polkadot/util';
+import { u8aToString } from '@polkadot/util';
 ```
 
 We also need to randomly generate a blob ID. Blob IDs have a fixed byte size, as defined in `DockBlobIdByteSize`. We can import it from the blob module like so:
@@ -107,11 +107,10 @@ async function writeBlob(blobValue, pair) {
 }
 ```
 
-Note that when passing the author parameter, the DID must be in hex format. This can be achieved by calling our helper method `getHexIdentifierFromDID`. Now that we have defined this method, we can call it and write a blob. Below `writeAuthorDID` in the main method, we can define a `blobValue` variable and call `writeBlob`. Note that to write strings as a blob, they must be converted to hex. Polkadot has a great utility method for this called `stringToHex`.
-
+Note that when passing the author parameter, the DID must be in hex format. This can be achieved by calling our helper method `getHexIdentifierFromDID`. Now that we have defined this method, we can call it and write a blob. Below `writeAuthorDID` in the main method, we can define a `blobValue` variable and call `writeBlob`.
 ```
   // Write blob as string
-  const blobValue = stringToHex('hello world');
+  const blobValue = 'hello world';
   const blobId = await writeBlob(blobValue, pair);
 ```
 
@@ -138,6 +137,18 @@ But what about other data formats than just strings? Well, it's quite simple to 
   const chainBlobArray = await dock.blob.get(blobIdArray);
   const blobArrayFromChain = chainBlobArray[1];
   console.log('Resulting blob array from chain:', blobArrayFromChain);
+```
+
+Or a JSON object:
+```
+// Write blob as JSON
+const blobValueJSON = {
+  myJsonObject: 'hello!'
+};
+const blobIdJSON = await writeBlob(blobValueJSON, pair);
+const chainBlobJSON = await dock.blob.get(blobIdJSON);
+const blobJSONfromChain = chainBlobJSON[1];
+console.log('Resulting blob JSON from chain:', blobJSONfromChain);
 ```
 
 (TODO: IDEA: auto format back into string or object etc in get method)
