@@ -1,6 +1,4 @@
-TOOD: include script and code at each point
-
-Intro
+# Intro
 TODO: Explain what dock is
 
 # Installation
