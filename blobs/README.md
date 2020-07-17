@@ -49,10 +49,16 @@ We will also import some additional Polkadot helper methods to convert strings f
 import { u8aToString, stringToHex } from '@polkadot/util';
 ```
 
-FInally, we need to randomly generate a blob ID. Blob IDs have a fixed byte size, as defined in `DockBlobIdByteSize`. We can import it from the blob module like so:
+We also need to randomly generate a blob ID. Blob IDs have a fixed byte size, as defined in `DockBlobIdByteSize`. We can import it from the blob module like so:
 
 ```
 import { DockBlobIdByteSize } from '@docknetwork/sdk/modules/blob';
+```
+
+And finally, we will define a global variable `dockDID` that is just a randomly generated DID:
+```
+// Generate a DID to be used as author
+const dockDID = createNewDockDID();
 ```
 
 # Writing an author DID
