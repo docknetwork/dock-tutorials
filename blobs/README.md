@@ -129,7 +129,7 @@ const blobStrFromChain = u8aToString(chainBlob[1]);
 console.log('Resulting blob string from chain:', blobStrFromChain);
 ```
 
-But what about other data formats than just strings? Well, it's quite simple to pass a raw array for example:
+But what about other data formats than just strings? Well, it's quite simple to pass a raw or typed array for example:
 ```
   // Write blob as array
   const blobValueArray = [1, 2, 3];
@@ -150,5 +150,3 @@ const chainBlobJSON = await dock.blob.get(blobIdJSON);
 const blobJSONfromChain = chainBlobJSON[1];
 console.log('Resulting blob JSON from chain:', blobJSONfromChain);
 ```
-
-(TODO: IDEA: auto format back into string or object etc in get method)
