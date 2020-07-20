@@ -1,11 +1,43 @@
-Start with imports:
+# Introduction to DIDs
+TODO: explain what is a DID, what its used for, why etc
 
+# Pre-requisites
+To write a DID, we need:
+- To be connected to the node
+- To have an account with funds to write transactions
+
+To begin with, we need to define a few imports and connect to a node. Start with a base script like we have in other tutorials to connect to a node:
+
+```
+// Import the dock SDK and resolver
+import dock from '@docknetwork/sdk';
+
+// Import some shared variables
+import { address, secretUri } from '../shared-constants';
+
+// Method from intro tutorial to connect to a node
+async function connectToNode() {
+  await dock.init({ address });
+  const account = dock.keyring.addFromUri(secretUri);
+  dock.setAccount(account);
+  console.log('Connected to the node and ready to go!');
+}
+
+async function main() {
+  // Connect to the node
+  await connectToNode();
+
+  // TODO: write DID txs here!
+}
+
+main()
+  .then(() => process.exit(0));
+```
+
+Now we need to import some helper methods so we can write DIDs:
 ```
 // Import some utils from Polkadot JS
 import { randomAsHex } from '@polkadot/util-crypto';
-
-// Import the dock SDK
-import dock from '@docknetwork/sdk';
 
 // Import some helper methods from the SDK
 import {
@@ -16,9 +48,6 @@ import {
 import {
   getPublicKeyFromKeyringPair,
 } from '@docknetwork/sdk/utils/misc';
-
-// Import some shared variables
-import { address, secretUri } from '../shared-constants';
 ```
 
 Add some constants, TODO: explain what they are used for and why
