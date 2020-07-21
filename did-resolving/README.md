@@ -6,6 +6,9 @@ DIDs are no good being written to the chain and not being able to read it back, 
 
 To begin with, we need to define a few imports and connect to a node. However, this is only because we will be writing a Dock DID and querying form the chain. If you don't need direct chain access, you don't need to connect to a node and can use the universal resolver or your own class. Start with a base script like we have in other tutorials to connect to a node:
 ```
+// Import some utils from Polkadot JS
+import { randomAsHex } from '@polkadot/util-crypto';
+
 // Import the dock SDK and resolver
 import dock from '@docknetwork/sdk';
 
@@ -23,9 +26,7 @@ async function connectToNode() {
 async function main() {
   // Connect to the node
   await connectToNode();
-
   // TODO: methods go here
-
   await dock.disconnect();
 }
 
@@ -109,3 +110,34 @@ async function main() {
   await dock.disconnect();
 }
 ```
+
+But what if the DID is not on the Dock chain? We can't ensure that all credentials we want to verify or schemas we want to lookup have Dock DIDs on the chain. For that we have a class named `UniversalResolver`. It is constructed with a URL that will point to a service, such as `uniresolver.io`, and on resolving it will submit a HTTP request to get the DID document. We can define a new method to construct and call this resolver:
+```
+// Method to resolve using the universal resolver
+async function resolveWithUniversalResolver(did) {
+  console.log('Creating and resolving with a UniversalResolver');
+
+  // Create a universal resolver instance, does not need an initialized SDK
+  const resolver = new UniversalResolver(universalResolverUrl);
+  await resolve(resolver, did);
+}
+```
+
+We should also define the global variable `universalResolverUrl` alongside `dockDID` so we can access it in other methods later:
+```
+// Define the universal resolver URL to ping
+const universalResolverUrl = 'https://uniresolver.io';
+```
+
+Now if we update our `main` method to call `resolveWithUniversalResolver` supplying an external DID, such as `did:github:gjgd`, we should be able to resolve it:
+```
+async function main() {
+  await connectToNode();
+  await writeDID();
+  await resolveDIDWithResolver(dockDID);
+  await resolveWithUniversalResolver('did:github:gjgd');
+  await dock.disconnect();
+}
+```
+
+TODO: multi resolver, custom resolver

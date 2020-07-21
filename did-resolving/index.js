@@ -33,9 +33,6 @@ const dockDID = createNewDockDID();
 // Generate first key with this seed. The key type is Sr25519
 const keySeed = randomAsHex(32);
 
-// Define an external DID to resolve
-const externalDID = 'did:github:gjgd';
-
 // Define the universal resolver URL to ping
 const universalResolverUrl = 'https://uniresolver.io';
 
@@ -114,7 +111,7 @@ async function main() {
   await connectToNode();
   await writeDID();
   await resolveDIDWithResolver(dockDID);
-  await resolveWithUniversalResolver(externalDID);
+  await resolveWithUniversalResolver('did:github:gjgd');
   await resolveWithMultiResolver(dockDID);
   await resolveDIDWithEthrResolver('did:ethr:0xabcabc03e98e0dc2b855be647c39abe984193675');
   await dock.disconnect();
