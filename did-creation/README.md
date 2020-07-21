@@ -28,6 +28,8 @@ async function main() {
   await connectToNode();
 
   // TODO: write DID txs here!
+
+  await dock.disconnect();
 }
 
 main()
@@ -59,18 +61,7 @@ const dockDID = createNewDockDID();
 const keySeed = randomAsHex(32);
 ```
 
-In the introduction tutorial we learned how to connect to a node. We can just take the `connectToNode` method from there and use it in this script:
-```
-// Method from intro tutorial to connect to a node
-async function connectToNode() {
-	await dock.init({ address });
-	const account = dock.keyring.addFromUri(secretUri);
-	dock.setAccount(account);
-  console.log('Connected to the node and ready to go!');
-}
-```
-
-Noww we need to create a method that will write the DID to the chain. Create a new asynchronous function named `writeDID`:
+Now we need to create a method that will write the DID to the chain. Create a new asynchronous function named `writeDID`:
 ```
 // Method to write the DID
 async function writeDID() {
@@ -78,13 +69,14 @@ async function writeDID() {
 }
 ```
 
-In the body of this method we will need to generate a keypair for the DID and extract its public key.,
+In the body of this method we will need to generate a keypair for the DID and extract its public key. We can use the dock keyring object to generate a Sr25519 key, then use the helper method `getPublicKeyFromKeyringPair` to extract its public key into a variable:
 ```
 // Generate keys for the DID.
 const keyPair = dock.keyring.addFromUri(keySeed, null, 'sr25519');
 const publicKey = getPublicKeyFromKeyringPair(keyPair);
 ```
 
+Now we have the keys needed, we should create a key detail object. This will determine who the DID controller is using a public key and a DID. In our case, the controller DID is the same as the new DID we are writing. However it can be a DID that was written to the chain at another time. Once we have a key detail object, we simply call `dock.did.new` passing our new DID and `keyDetail`. Wait on this promise to finish and our DID should be written.
 ```
 // Create a key detail, controller being same as the DID
 const keyDetail = createKeyDetail(publicKey, dockDID);
@@ -92,8 +84,7 @@ await dock.did.new(dockDID, keyDetail);
 console.log('DID created!');
 ```
 
-
-Code to run the tutorial...
+Finally we can expand the main method that will run our code to call `writeDID`. It should look like this:
 ```
 // Run!
 async function main() {
