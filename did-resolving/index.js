@@ -14,7 +14,7 @@ import {
   getPublicKeyFromKeyringPair,
 } from '@docknetwork/sdk/utils/misc';
 
-// Import the dock resolver
+// Import the resolvers
 import {
   DockResolver,
   UniversalResolver,
@@ -30,12 +30,13 @@ import { address, secretUri } from '../shared-constants';
 // DID will be generated randomly
 const dockDID = createNewDockDID();
 
-// Define an external DID to resolve
-const externalDID = 'did:github:gjgd';
-
 // Generate first key with this seed. The key type is Sr25519
 const keySeed = randomAsHex(32);
 
+// Define an external DID to resolve
+const externalDID = 'did:github:gjgd';
+
+// Define the universal resolver URL to ping
 const universalResolverUrl = 'https://uniresolver.io';
 
 // Method from intro tutorial to connect to a node
@@ -56,13 +57,6 @@ async function writeDID() {
   const keyDetail = createKeyDetail(publicKey, dockDID);
   await dock.did.new(dockDID, keyDetail);
   console.log('DID created!');
-}
-
-// Method to resolve the dockDID from the chain
-async function resolveDIDOnChain(did) {
-  const result = await dock.did.getDocument(did);
-  console.log('DID Document:', did, result);
-  return result;
 }
 
 // Helper method to resolve from any resolver
@@ -119,7 +113,6 @@ async function resolveDIDWithEthrResolver(did) {
 async function main() {
   await connectToNode();
   await writeDID();
-  await resolveDIDOnChain(dockDID);
   await resolveDIDWithResolver(dockDID);
   await resolveWithUniversalResolver(externalDID);
   await resolveWithMultiResolver(dockDID);
