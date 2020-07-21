@@ -34,7 +34,7 @@ main()
   .then(() => process.exit(0));
 ```
 
-Now we need to import some helper methods so we can write DIDs:
+Now we need to import some helper methods so we can write DIDs from the SDK. We will also import the `randomAsHex` method from Polkadot to give us a random hex string for seeds. From the SDK we need to use the `createNewDockDID` which will generate a new, random Dock DID. The `createKeyDetail` is then used along with a valid Sr25519 key to write the DID to chain with controller information. In this example, the controller is the same as the DID. The `getPublicKeyFromKeyringPair` will take a keypair object and return its public key. Import methods as follows:
 ```
 // Import some utils from Polkadot JS
 import { randomAsHex } from '@polkadot/util-crypto';
@@ -50,7 +50,7 @@ import {
 } from '@docknetwork/sdk/utils/misc';
 ```
 
-Add some constants, TODO: explain what they are used for and why
+As mentioned above we need a Dock DID and a seed. The `dockDID` variable contains our new Dock DID, and the `keySeed` variable is our key's seed. Sr25519 keys use a 32-byte hex string. We will set these global variables below our import statements like so:
 ```
 // DID will be generated randomly
 const dockDID = createNewDockDID();
@@ -59,7 +59,7 @@ const dockDID = createNewDockDID();
 const keySeed = randomAsHex(32);
 ```
 
-Take code from intro tutorial to connect to a node
+In the introduction tutorial we learned how to connect to a node. We can just take the `connectToNode` method from there and use it in this script:
 ```
 // Method from intro tutorial to connect to a node
 async function connectToNode() {
@@ -70,20 +70,28 @@ async function connectToNode() {
 }
 ```
 
-Add method to write a DID, TODO: explain
+Noww we need to create a method that will write the DID to the chain. Create a new asynchronous function named `writeDID`:
 ```
 // Method to write the DID
 async function writeDID() {
-  // Generate keys for the DID.
-  const keyPair = dock.keyring.addFromUri(keySeed, null, 'sr25519');
-  const publicKey = getPublicKeyFromKeyringPair(keyPair);
 
-  // Create a key detail, controller being same as the DID
-  const keyDetail = createKeyDetail(publicKey, dockDID);
-  await dock.did.new(dockDID, keyDetail);
-  console.log('DID created!');
 }
 ```
+
+In the body of this method we will need to generate a keypair for the DID and extract its public key.,
+```
+// Generate keys for the DID.
+const keyPair = dock.keyring.addFromUri(keySeed, null, 'sr25519');
+const publicKey = getPublicKeyFromKeyringPair(keyPair);
+```
+
+```
+// Create a key detail, controller being same as the DID
+const keyDetail = createKeyDetail(publicKey, dockDID);
+await dock.did.new(dockDID, keyDetail);
+console.log('DID created!');
+```
+
 
 Code to run the tutorial...
 ```
