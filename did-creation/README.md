@@ -6,6 +6,7 @@ To write a DID, we need:
 - To be connected to the node
 - To have an account with funds to write transactions
 
+# Writing DIDs to the chain
 To begin with, we need to define a few imports and connect to a node. Start with a base script like we have in other tutorials to connect to a node:
 
 ```
@@ -95,4 +96,87 @@ async function main() {
 
 main()
   .then(() => process.exit(0));
+```
+
+# Updating DIDs
+TODO: intro why we'd want to update a DID's key and controller
+
+To begin with we will need a new asynchronous method called `updateDID`. It will be called after `writeDID` in the main method.
+
+```
+// Method to update the DID's key
+async function updateDID() {
+
+}
+```
+
+We also need to declare another global variable next to where we declare `dockDID` and `keySeed`:
+```
+// Generate second key (for update) with this seed. The key type is Ed25519
+const secondKeySeed = randomAsHex(32);
+```
+
+In order to update the DID's key and controller we need to have the current private and public key for a DID. In our case, we generated
+it from a seed in the `writeDID` method. So, in the body of `updateDID` we can set a variable with the current DID keypair:
+```
+// Sign key update with this key pair as this is the current key of the DID
+const currentPair = dock.keyring.addFromUri(keySeed, null, 'sr25519');
+```
+
+We want to update the DID's key and controller, so we should generate a new key and controller to do so. We will use a ED25519 key this time:
+```
+// Update DID key to the following
+const newPair = dock.keyring.addFromUri(secondKeySeed, null, 'ed25519');
+const newPk = getPublicKeyFromKeyringPair(newPair);
+
+// Generate a random new controller ID
+const newController = randomAsHex(32);
+```
+
+With the new keypair, new public key and new controller variables set we can create and sign a key update object along with a signature.
+This will allow us to verify that we are the current controller of the DID and want to transfer ownership to the new controller and keypair.
+We can achieve this using the helper method `createSignedKeyUpdate` which should be imported from `@docknetwork/sdk/utils/did`.
+```
+const [keyUpdate, signature] = await createSignedKeyUpdate(dock.did, dockDID, newPk, currentPair, newController);
+```
+
+Finally we want to submit the transaction, by simply calling `dock.did.updateKey`:
+```
+await dock.did.updateKey(keyUpdate, signature);
+console.log('DID key updated!');
+```
+
+# Removing DIDs
+We have learned how to write a DID and update it, now we need to learn how to remove it from the chain. Similar to when updating a key, we need to sign our removal transaction so that the chain can verify we are the controller and have permission
+to remove it. We can do so by importing another helper method named `createSignedDidRemoval` from `@docknetwork/sdk/utils/did`:
+```
+// Import some helper methods from the SDK
+import {
+  createNewDockDID,
+  createKeyDetail,
+  createSignedKeyUpdate,
+  createSignedDidRemoval,
+} from '@docknetwork/sdk/utils/did';
+```
+
+Declare a new asynchronous method named `removeDID`, we will call this after the `updateDID` method in `main` and get the current keypair like before:
+```
+// Method to remove the DID from chain
+async function removeDID() {
+  // Get the DID's current keypair
+  const currentPair = dock.keyring.addFromUri(secondKeySeed, null, 'ed25519');
+}
+```
+
+Now we need to call `createSignedDidRemoval` to create a signed DID removal object and get it's signature. This method behaves similar to
+`createSignedKeyUpdate`, enabling the chain to verify that we are the controller:
+```
+// Sign the DID removal with this key pair as this is the current key of the DID
+const [didRemoval, signature] = await createSignedDidRemoval(dock.did, dockDID, currentPair);
+```
+
+With these two variables we can now call `dock.did.remove`, wait for the promise to finish and our DID will be removed!
+```
+await dock.did.remove(didRemoval, signature);
+console.log('DID removed!');
 ```
