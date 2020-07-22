@@ -157,7 +157,7 @@ const dockResolver = new DockResolver(dock);
 const uniResolver = new UniversalResolver(universalResolverUrl);
 ```
 
-The MultiResolver class constructor takes two arguments, an object of DID type to resolver mappings, for example `did:dock` would map to `{ dock: dockResolver }`, `did:ethr` to `{ ethr: ethrResolver }` and so on. The second argument we should provide is a fallback resolver to use if no DID can be found in the map, typically you should supply a `UniversalResolver` instance here:
+The `MultiResolver` class constructor takes two arguments, an object of DID type to resolver mappings, for example `did:dock` would map to `{ dock: dockResolver }`, `did:ethr` to `{ ethr: ethrResolver }` and so on. The second argument we should provide is a fallback resolver to use if no DID can be found in the map, typically you should supply a `UniversalResolver` instance here:
 ```
 // Create a list of resolvers, did:dock would resolve to dockResolver
 const resolvers = {
@@ -172,8 +172,93 @@ And finally, we add the resolve call passing our `MultiResolver`:
 ```
 await resolve(resolver, did);
 ```
-Calling `resolveWithMultiResolver` with a DID, such as our variable `dockDID` will return a document. You can also query the other example external DID `did:github:gjgd` with the same method, so no need to keep referencing two resolvers as we did previously in the tutorial.
 
-But what if the universal resolver doesn't support the DID type you want to resolve? For this, we enable you to be able to import a base `DIDResolver` class and extend it to suit your needs.
+Calling `resolveWithMultiResolver` with a DID, such as our variable `dockDID`, in our main method will return a document. You can also query the other example external DID `did:github:gjgd` with the same method, so no need to keep referencing two resolvers as we did previously in the tutorial.
 
-TODO: custom resolver
+But what if the universal resolver doesn't support the DID type you want to resolve? For this, we enable you to be able to import a base `DIDResolver` class and extend it to suit your needs. Create a new file named `ethr-resolver.js` where your DID resolving script is located, and then add the following:
+```
+// Import the DID resolver base class
+import {
+  DIDResolver,
+} from '@docknetwork/sdk/resolver';
+
+// Custom ethereum resolver class
+export default class EtherResolver extends DIDResolver {
+  constructor() {
+    super();
+  }
+
+  async resolve(did) {
+    // TODO!
+  }
+}
+```
+
+Here we import the `DIDResolver` base class that all resolvers should extend from and we naming our new class `EtherResolver` as it will be used to resolve `ethr` DIDs using the `ethr-did-resolver` NPM package. Go ahead and install that package through `npm install ethr-did-resolver` or `yarn install ethr-did-resolver`. We have to provide some config options for this library when we initialize it, so let's define them at the top of our file with the imports:
+```
+import ethr from 'ethr-did-resolver';
+
+// Infura's Ethereum provider for the main net
+const ethereumProviderConfig = {
+  networks: [
+    {
+      name: 'mainnet',
+      rpcUrl: 'https://mainnet.infura.io/v3/05f321c3606e44599c54dbc92510e6a9',
+    },
+  ],
+};
+```
+
+You can read more about the specifics of this configuration on the `ethr-did-resolver` Github or NPM page, but for now we will just use Infura to connect to the Ethereum main-net. In our class constructor, add the following to initialize the ethr resolver from the library:
+```
+this.ethres = ethr.getResolver(ethereumProviderConfig).ethr;
+```
+
+and update the resolve method to call it:
+```
+async resolve(did) {
+  const parsed = this.parseDid(did);
+  return await this.ethres(did, parsed);
+}
+```
+
+The `parseDid` method will take a DID URL and returns an object with the full qualified `did`, the DID `method` and the DID `id`. Not all resolvers need to call this, but the ethr resolver requires it in this format.
+
+We should ensure correct error handling in custom resolvers so that tests and applications work as expected. To do so, you can import the `NoDIDError` class from `@docknetwork/sdk/utils/did` and throw a new instance of it if the DID isn't found. Update the resolve method as follows:
+```
+async resolve(did) {
+  const parsed = this.parseDid(did);
+  try {
+    return await this.ethres(did, parsed);
+  } catch (e) {
+    throw new NoDIDError(did);
+  }
+}
+```
+
+Like with the other resolvers we can define a method that takes a DID url, creates an `EtherResolver` instance and then calls the `resolve` function:
+```
+// Import our custom resolver
+import EtherResolver from './ethr-resolver';
+
+// Method to resolve a did using EtherResolver
+async function resolveDIDWithEthrResolver(did) {
+  console.log('Creating and resolving with a EtherResolver');
+  // Create a custom ethr resolver instance
+  const resolver = new EtherResolver();
+  await resolve(resolver, did);
+}
+```
+
+You can call this in `main` along with your other resolver calls:
+```
+async function main() {
+  await connectToNode();
+  // ...
+  await resolveDIDWithEthrResolver('did:ethr:0xabcabc03e98e0dc2b855be647c39abe984193675');
+  // ...
+  await dock.disconnect();
+}
+```
+
+That concludes the various types of DID resolvers in the Dock SDK.

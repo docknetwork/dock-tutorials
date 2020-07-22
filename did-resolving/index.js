@@ -22,7 +22,7 @@ import {
 } from '@docknetwork/sdk/resolver';
 
 // Import our custom resolver
-import EtherResolver, { ethereumProviderConfig } from './ethr-resolver';
+import EtherResolver from './ethr-resolver';
 
 // Import some shared variables
 import { address, secretUri } from '../shared-constants';
@@ -103,7 +103,7 @@ async function resolveWithMultiResolver(did) {
 async function resolveDIDWithEthrResolver(did) {
   console.log('Creating and resolving with a EtherResolver');
   // Create a custom ethr resolver instance
-  const resolver = new EtherResolver(ethereumProviderConfig);
+  const resolver = new EtherResolver();
   await resolve(resolver, did);
 }
 

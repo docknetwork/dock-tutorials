@@ -10,7 +10,7 @@ import {
 import ethr from 'ethr-did-resolver';
 
 // Infura's Ethereum provider for the main net
-export const ethereumProviderConfig = {
+const ethereumProviderConfig = {
   networks: [
     {
       name: 'mainnet',
@@ -21,9 +21,9 @@ export const ethereumProviderConfig = {
 
 // Custom ethereum resolver class
 export default class EtherResolver extends DIDResolver {
-  constructor(config) {
+  constructor() {
     super();
-    this.ethres = ethr.getResolver(config).ethr;
+    this.ethres = ethr.getResolver(ethereumProviderConfig).ethr;
   }
 
   async resolve(did) {
