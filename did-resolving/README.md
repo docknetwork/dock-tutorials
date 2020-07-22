@@ -140,4 +140,40 @@ async function main() {
 }
 ```
 
-TODO: multi resolver, custom resolver
+We've learned so far how to query the node we are connected to and the universal resolver, but what if we want to support multiple DID types in one action? Well, we can do that with the `MultiResolver` class. You can import it from `@docknetwork/sdk/resolver` like the other resolvers. Once that is done declare a method named `resolveWithMultiResolver` with one argument `did`:
+```
+// Method to resolve using the multi resolver
+async function resolveWithMultiResolver(did) {
+  console.log('Creating and resolving with a MultiResolver');
+}
+```
+
+Within the body of that method we are going to need to setup at least a `DockResolver` instance, a `UniversalResolver` fallback instance and then finally instantiate and use the `MultiResolver` class. So, like before create a Dock and universal resolver:
+```
+// Create a dock resolver for our chain
+const dockResolver = new DockResolver(dock);
+
+// Create a universal resolver, used as a fallback if no resolver is found in the list
+const uniResolver = new UniversalResolver(universalResolverUrl);
+```
+
+The MultiResolver class constructor takes two arguments, an object of DID type to resolver mappings, for example `did:dock` would map to `{ dock: dockResolver }`, `did:ethr` to `{ ethr: ethrResolver }` and so on. The second argument we should provide is a fallback resolver to use if no DID can be found in the map, typically you should supply a `UniversalResolver` instance here:
+```
+// Create a list of resolvers, did:dock would resolve to dockResolver
+const resolvers = {
+  dock: dockResolver,
+};
+
+// Create the multi resolver, use it like any other
+const resolver = new MultiResolver(resolvers, uniResolver);
+```
+
+And finally, we add the resolve call passing our `MultiResolver`:
+```
+await resolve(resolver, did);
+```
+Calling `resolveWithMultiResolver` with a DID, such as our variable `dockDID` will return a document. You can also query the other example external DID `did:github:gjgd` with the same method, so no need to keep referencing two resolvers as we did previously in the tutorial.
+
+But what if the universal resolver doesn't support the DID type you want to resolve? For this, we enable you to be able to import a base `DIDResolver` class and extend it to suit your needs.
+
+TODO: custom resolver
