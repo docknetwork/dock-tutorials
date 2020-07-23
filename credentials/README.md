@@ -135,9 +135,10 @@ An expiration date is not set by default as it isn't required by the specs. If y
 ```
 
 ## Signing a Verifiable Credential
-Once you've crafted your Verifiable Credential it is time to sign it. This can be achieved with the `sign` method. It requires a `keyDoc` parameter (an object with the params and keys you'll use for signing) and it also accepts a boolean `compactProof` that determines whether you want to compact the JSON-LD or not:
+Once you've crafted your Verifiable Credential it is time to sign it. This can be achieved with the `sign` method. It requires a `keyDoc` parameter (an object with the params and keys you'll use for signing) and it also accepts a boolean `compactProof` that determines whether you want to compact the JSON-LD or not. Note that by default, `compactProof` is `true`:
 ```javascript
-await vc.sign(keyDoc);
+const compactProof = true;
+await vc.sign(keyDoc, compactProof);
 ```
 Please note that signing is an asynchronous process, and must be treated like a promise. Once done, your `vc` object will have a new `proof` field similar to:
 ```javascript
@@ -160,6 +161,17 @@ So if we had our `issuerSeed` and `issuerDID` variables assigned to a key seed a
 ```javascript
 const pair = dock.keyring.addFromUri(issuerSeed, null, 'ed25519');
 const keyDoc = getKeyDoc(issuerDID, pair, 'Ed25519VerificationKey2018');
+```
+
+and then call the `sign` method of `credentialOne`. Remember that `compactProof` is marked as true by default, so when verifying we should specify that the proof is compacted:
+```javascript
+// Method to sign the credential with given keypair
+async function signCredential() {
+  console.log('Issuer will sign the credential now');
+  const pair = dock.keyring.addFromUri(issuerSeed, null, 'ed25519');
+  const issuerKey = getKeyDoc(issuerDID, pair, 'Ed25519VerificationKey2018');
+  await credentialOne.sign(issuerKey);
+}
 ```
 
 If you've been following correctly, you should have something that looks like this where we connect to the node, write an issuer DID (or just use a key from an existing one) and then sign the credential with that issuer DID and key:
