@@ -73,7 +73,6 @@ async function signCredential() {
   const pair = dock.keyring.addFromUri(issuerSeed, null, 'ed25519');
   const issuerKey = getKeyDoc(issuerDID, pair, 'Ed25519VerificationKey2018');
   await credentialOne.sign(issuerKey);
-  console.log('Credential signed, verifying...');
 }
 
 // Run!
@@ -92,6 +91,8 @@ async function main() {
 
   // Sign the credential to get the proof
   await signCredential();
+
+  console.log('Credential signed, verifying...');
 
   // Create a resolver in order to lookup DIDs for verifying
   const resolver = new DockResolver(dock);
