@@ -1,4 +1,4 @@
-// Import the VerifiableCredential object
+// Import the VerifiableCredential class
 import VerifiableCredential from '@docknetwork/sdk/verifiable-credential';
 
 // Import the dock SDK and resolver
