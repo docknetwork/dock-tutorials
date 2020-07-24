@@ -1,5 +1,5 @@
 # Creating verifiable credentials
-The `client-sdk` exposes a `VerifiableCredential` class that is useful to create valid Verifiable Credentials of any type, sign them and verify them. Once the credential is initialized, you can sequentially call the different methods provided by the class to add contexts, types, issuance dates and everything else. You can also create a `VerifiableCredential` instance from JSON values.
+The Dock SDK exposes a `VerifiableCredential` class that is useful to create valid Verifiable Credentials of any type, sign them and verify them. Once the credential is initialized, you can sequentially call the different methods provided by the class to add contexts, types, issuance dates and everything else. You can also create a `VerifiableCredential` instance from JSON values.
 
 The first step to build a Verifiable Credential is to import the class and initialize it, we can do that using the `VerifiableCredential` class constructor which takes a `credentialId` as sole argument or using the static `fromJSON` method passing a JSON object. We will use both in this tutorial, beginning with the JSON object. Import the class like so:
 ```javascript
