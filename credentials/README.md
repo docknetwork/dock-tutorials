@@ -240,18 +240,10 @@ If your credential uses schema and requires blob resolution, you can pass a `sch
 >   result
 <-  {
       verified: true,
-      results: [
-        {
-          proof: [
-            {
-                '@context': 'https://w3id.org/security/v2',
-                type: "EcdsaSecp256k1Signature2019",
-                created: "2020-04-14T14:48:48.486Z",
-                jws: "eyJhbGciOiJFUzI1NksiLCJiNjQiOmZhbHNlLCJjcml0IjpbImI2NCJdfQ..MEQCIAS8ZNVYIni3oShb0TFz4SMAybJcz3HkQPaTdz9OSszoAiA01w9ZkS4Zx5HEZk45QzxbqOr8eRlgMdhgFsFs1FnyMQ",
-                proofPurpose: "assertionMethod",
-                verificationMethod: "https://gist.githubusercontent.com/faustow/13f43164c571cf839044b60661173935/raw"
-            }
-          ],
+      results: [{
+          proof: [{
+              ...
+          }],
           verified: true
         }
       ]

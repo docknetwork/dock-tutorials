@@ -1,4 +1,4 @@
-// Import the VerifiableCredential object
+// Import the VC/VP classes
 import VerifiableCredential from '@docknetwork/sdk/verifiable-credential';
 import VerifiablePresentation from '@docknetwork/sdk/verifiable-presentation';
 
@@ -34,9 +34,6 @@ console.log('Credential created:', credential.toJSON());
 const issuerDID = createNewDockDID();
 const issuerSeed = randomAsHex(32);
 
-// Set a presentation ID
-const presentationId = 'http://example.edu/credentials/2803';
-
 // Method from intro tutorial to connect to a node
 async function connectToNode() {
   await dock.init({ address });
@@ -70,10 +67,8 @@ async function main() {
   await registerIssuerDID();
   await signCredential();
 
-  const resolver = new DockResolver(dock);
-
   // Create presentation and add credential
-	const presentation = new VerifiablePresentation(presentationId);
+	const presentation = new VerifiablePresentation('http://example.edu/credentials/2803');
 
   // You can add as many credentials as needed,
   // we will use just one here
@@ -83,9 +78,12 @@ async function main() {
   const challenge = randomAsHex(32);
   const domain = 'example domain';
 
+  // Create a DID resolver
+  const resolver = new DockResolver(dock);
+
   // Get holder keydoc and sign the presentation
   // in this example holder and issuer are the same DID but they can differ
-  console.log('Holder will sign the presentation now...');
+  console.log('Signing the presentation now...');
   const holderKey = getKeyDoc(issuerDID, dock.keyring.addFromUri(issuerSeed, null, 'ed25519'), 'Ed25519VerificationKey2018');
   await presentation.sign(holderKey, challenge, domain, resolver);
   console.log('Signed presentation', presentation.toJSON());
