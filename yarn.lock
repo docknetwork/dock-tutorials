@@ -812,10 +812,10 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@docknetwork/sdk@^0.1.3":
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/@docknetwork/sdk/-/sdk-0.1.3.tgz#1021a3115309c143fa314da246365df0b3736c40"
-  integrity sha512-d14IeKiM8AzTe3hwP7KvLz6nOzLggeGdSpsaKTl5+WFaX9scyBFlYzs81i75QHSicI6LuNDHhXKdOM6wa6pAcQ==
+"@docknetwork/sdk@^0.1.5":
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/@docknetwork/sdk/-/sdk-0.1.5.tgz#7567b93a71886370707b66b8bba7eb89b646b66c"
+  integrity sha512-IEx9q6jN3MrTy7PU1a54+7GcuVPEGNHhh3PHQam+SYaTG/ShsKg2bNlHxeNBf2e4wSOEzyJM+vjhge4gvjfl8Q==
   dependencies:
     "@polkadot/api" "1.17.1"
     "@polkadot/keyring" "2.12.2"
@@ -3267,6 +3267,18 @@ jsonld-signatures@^4.4.0:
     security-context "^4.0.0"
     serialize-error "^4.1.0"
 
+"jsonld-signatures@git+https://github.com/docknetwork/jsonld-signatures.git#avoid-extendContextLoader":
+  version "5.0.2-0"
+  uid "416082535cac1f0a2a36bd0b665faca5fc479584"
+  resolved "git+https://github.com/docknetwork/jsonld-signatures.git#416082535cac1f0a2a36bd0b665faca5fc479584"
+  dependencies:
+    base64url "^3.0.1"
+    crypto-ld "^3.7.0"
+    jsonld "^2.0.2"
+    node-forge "^0.9.1"
+    security-context "^4.0.0"
+    serialize-error "^5.0.0"
+
 "jsonld-signatures@https://github.com/docknetwork/jsonld-signatures#avoid-extendContextLoader":
   version "5.0.2-0"
   resolved "https://github.com/docknetwork/jsonld-signatures#416082535cac1f0a2a36bd0b665faca5fc479584"
@@ -4870,9 +4882,9 @@ validate-npm-package-license@^3.0.1:
     spdx-correct "^3.0.0"
     spdx-expression-parse "^3.0.0"
 
-"vc-js@https://github.com/docknetwork/vc-js#avoid-extendContextLoader":
+"vc-js@git+https://github.com/docknetwork/vc-js.git#avoid-extendContextLoader":
   version "0.5.1-0"
-  resolved "https://github.com/docknetwork/vc-js#98ad8eac68bbc58ad26584dc8aae2ce710fcf320"
+  resolved "git+https://github.com/docknetwork/vc-js.git#98ad8eac68bbc58ad26584dc8aae2ce710fcf320"
   dependencies:
     commander "^2.20.3"
     credentials-context "^1.0.0"
