@@ -26,8 +26,6 @@ import exampleVC from '../example-vc.json';
 // Create a credential from a JSON object
 const credential = VerifiableCredential.fromJSON(exampleVC);
 
-// TODO: set credential status
-
 // Create a random registry id
 const registryId = createRandomRegistryId();
 
@@ -35,16 +33,11 @@ const registryId = createRandomRegistryId();
 const controllerDID = createNewDockDID();
 const controllerSeed = randomAsHex(32);
 
+// Create a registry policy
+const policy = new OneOfPolicy([controllerDID]);
+
 // Create a did/keypair proof map
 const didKeys = new KeyringPairDidKeys();
-
-// Create a list of controllers
-const controllers = new Set();
-controllers.add(controllerDID);
-
-// Create a registry policy
-// TODO: comment and explain this further
-const policy = new OneOfPolicy(controllers);
 
 // Method from intro tutorial to connect to a node
 async function connectToNode() {
@@ -127,6 +120,10 @@ async function main() {
 
   // Revoke the credential, next verify attempt will fail
   await revoke();
+
+  // Check if revoked
+  const isRevoked = await dock.revocation.getIsRevoked(registryId, revokeId);
+  console.log('Is Revoked:', isRevoked);
 
   // Verify the credential, it should fail
   const resultAfterRevocation = await credential.verify(verifyParams);
