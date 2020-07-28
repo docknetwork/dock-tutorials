@@ -21,7 +21,7 @@ async function main() {
   // Connect to the node
   await connectToNode();
 
-  // TODO: write DID txs here!
+  // ...
 
   await dock.disconnect();
 }

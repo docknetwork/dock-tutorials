@@ -39,6 +39,9 @@ const policy = new OneOfPolicy([controllerDID]);
 // Create a did/keypair proof map
 const didKeys = new KeyringPairDidKeys();
 
+// Create a registry policy using one of our controllers
+const policy = new OneOfPolicy([controllerDID]);
+
 // Method from intro tutorial to connect to a node
 async function connectToNode() {
   await dock.init({ address });
@@ -93,8 +96,8 @@ async function main() {
   // In order for revocation to work with credentials, we need to
   // set a credential status object within the VC. The verifier will check
   // the revocation registry based on the credential status. We use a helper method
-  // to build a dock credential status
-  // TODO: explain what buildDockCredentialStatus does
+  // to build a dock credential status which constructs a credeential status object
+  // which contains the registry ID and registry type
   const credentialStatus = buildDockCredentialStatus(registryId);
   credential.setStatus(credentialStatus);
   console.log('Credential created:', credential.toJSON());
@@ -106,7 +109,9 @@ async function main() {
   const resolver = new DockResolver(dock);
 
   // Construct arguments for verifying
-  // TODO: explain each param
+  // we need to pass a resolver for the DID we wrote, force the revocation check
+  // and pass our revocation API instance, which is the same as our Dock API instance
+  // since its resolved on the Dock chain
   const verifyParams = {
     resolver,
     compactProof: true,

@@ -1,8 +1,5 @@
 # Introduction to blobs
-TODO: describe what are blobs, what they are used for in the SDK
-
-# Pre-requisites
-In order to write and read blobs to and from the chain, we require three things:
+Blobs are simply binary objects stored on chain that can be written, retrieved and deleted. The chain stores an finite-sized 8-byte integer array, so typically we use blobs to store JSON objects, strings and other data that can be serialized into uint8 format. In order to write and read blobs to and from the chain, we require three things:
 - A valid Author DID
 - The keyring pair for this DID
 - An account with enough funds to write to the node's storage
@@ -27,7 +24,7 @@ async function main() {
   // Connect to the node
   await connectToNode();
 
-  // TODO: write DID and blob txs here!
+  // ...
 }
 
 main()
