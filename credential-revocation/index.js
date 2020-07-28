@@ -101,6 +101,10 @@ async function main() {
   await createControllerDID();
   await createRegistry();
 
+  // Read the revocation registry details to confirm its written to chain
+  const detail = await dock.revocation.getRegistryDetail(registryId);
+  console.log('Registry detail:', detail);
+
   // In order for revocation to work with credentials, we need to
   // set a credential status object within the VC. The verifier will check
   // the revocation registry based on the credential status. We use a helper method

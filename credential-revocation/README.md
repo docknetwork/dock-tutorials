@@ -221,6 +221,15 @@ console.log('After revocation: ', resultAfterRevocation)
 
 And now verification should fail for this credential!
 
+## Fetching registry details
+It is possible to read the details about a revocation registry from chain using the `getRegistryDetail` method. After creating our registry, add the following:
+
+```javascript
+// Read the revocation registry details to confirm its written to chain
+const detail = await dock.revocation.getRegistryDetail(registryId);
+console.log('Registry detail:', detail);
+```
+
 ## Removing the registry
 A registry can be deleted leading to all the corresponding revocation ids being deleted as well. This requires the signature from owner like other updates. You can use the `dock.revocation.removeRegistry` method to remove a registry. To cleanup this example, define a method named `removeRegistry`:
 ```javascript
