@@ -1,10 +1,10 @@
 # Introduction to DIDs
-TODO: explain what is a DID, what its used for, why etc
+DIDs in Dock are created by choosing a 32 byte unique (on Dock chain) identifier along with a public key. The public key can be changed by providing a signature with the currently active key. The DID can also be removed by providing a signature with the currently active key. As of now, a DID can have only one key at a time.
 
-# Pre-requisites
-To write a DID, we need:
+The chain-state stores a few things for a DID, the current public key, the controller and the block number when the DID was last updated for replay protection. In order to write a DID, we need:
 - To be connected to the node
 - To have an account with funds to write transactions
+- Have a keypair used to sign/control the DID
 
 # Writing DIDs to the chain
 To begin with, we need to define a few imports and connect to a node. Start with a base script like we have in other tutorials to connect to a node:
@@ -24,11 +24,8 @@ async function connectToNode() {
 }
 
 async function main() {
-  // Connect to the node
   await connectToNode();
-
-  // TODO: write DID txs here!
-
+  // ...
   await dock.disconnect();
 }
 
@@ -98,9 +95,7 @@ main()
 ```
 
 # Updating DIDs
-TODO: intro why we'd want to update a DID's key and controller
-
-To begin with we will need a new asynchronous method called `updateDID`. It will be called after `writeDID` in the main method.
+Sometimes we may want to update a DID's controller and/or keypair, perhaps for key rotation or some other security reason. To do so in this example, we will need to define a new asynchronous method called `updateDID`. It will be called after `writeDID` in the main method.
 ```javascript
 // Method to update the DID's key
 async function updateDID() {
