@@ -33,7 +33,6 @@ main()
 We will also need to import a few helper methods and classes that you may have seen in previous tutorials:
 ```javascript
 import { createNewDockDID, createKeyDetail } from '@docknetwork/sdk/utils/did';
-import { buildDockCredentialStatus } from '@docknetwork/sdk/utils/vc';
 import { getPublicKeyFromKeyringPair } from '@docknetwork/sdk/utils/misc';
 import VerifiableCredential from '@docknetwork/sdk/verifiable-credential';
 import { DockResolver } from '@docknetwork/sdk/resolver';
@@ -148,6 +147,13 @@ Note that revoking multiple IDs in a single transaction is possible but with a l
 await revoke();
 ```
 
+## Undoing a revocation
+Similar to revocation, undoing the revocation also requires a signature from the owner of the registry. With the `didKeys` map, the registry id, `registryId` and the revocation id to undo, `revokeId` and send the transaction on chain. Unrevoking an unrevoked credential has no effect.
+```js
+await dock.revocation.unrevokeCredential(didKeys, registryId, revokeId);
+```
+Undoing revocation for multiple ids in a single transaction is possible but with a lower level method `dock.revocation.unrevoke`.
+
 ## Checking the revocation status
 To check an id is revoked or not, call `dock.revocation.getIsRevoked` with the registry id and revocation id. It will return `true` if revoked, otherwise `false`. In our main method after the call to revoke, add the following:
 ```javascript
@@ -156,3 +162,74 @@ console.log('Is Revoked:', isRevoked);
 ```
 
 On running the code, it should create a DID, registry, revoke the credential ID and output that it was revoked!
+
+## Revocation and verification
+On verifying a credential, its revocation status will be checked to see if it's still valid or not. Let's try to set our credential's status, sign it and then attempt to verify. Similar to the credential building tutorial, create a method to sign it like so:
+```javascript
+// Method to sign the credential with given keypair
+async function signCredential() {
+  console.log('Issuer will sign the credential now');
+  const pair = dock.keyring.addFromUri(controllerSeed, null, 'sr25519');
+  const issuerKey = getKeyDoc(controllerDID, pair, 'Sr25519VerificationKey2020');
+  await credential.sign(issuerKey);
+  console.log('Credential signed, verifying...');
+}
+```
+
+In order for revocation to work with credentials, we need to set a credential status object within the VC that matches our revocation registry. The verifier will check the revocation registry based on the credential status. We use a helper method to build a dock credential status which constructs a credeential status object which contains the registry ID and registry type. `buildDockCredentialStatus` can be imported from VC utils:
+```javascript
+import { buildDockCredentialStatus } from '@docknetwork/sdk/utils/vc';
+```
+
+Then in our main method after calling `createRegistry`, add the following:
+```javascript
+const credentialStatus = buildDockCredentialStatus(registryId);
+credential.setStatus(credentialStatus);
+console.log('Credential created:', credential.toJSON());
+
+// Sign credential, for this example we use controller as issuer
+await signCredential();
+```
+
+And then, taking cues from the verifiable credential tutorial we will construct a resolver and verify our credential. We need to pass a resolver for the DID we wrote, force the revocation check and pass our revocation API instance, which is the same as our Dock API instance since its resolved on the Dock chain:
+```javascript
+// Create a resolver in order to lookup DIDs for verifying
+const resolver = new DockResolver(dock);
+
+// Construct arguments for verifying
+const verifyParams = {
+  resolver,
+  compactProof: true,
+  forceRevocationCheck: true,
+  revocationApi: { dock }
+};
+
+// Verify the credential, it should succeed
+const resultBeforeRevocation = await credential.verify(verifyParams);
+console.log('Before revocation: ', resultBeforeRevocation)
+```
+
+On running the code, the credential should be verified successfully. Now we can revoke the credential and try to verify again:
+```javascript
+// Revoke the credential, next verify attempt will fail
+await revoke();
+
+// Verify the credential, it should fail
+const resultAfterRevocation = await credential.verify(verifyParams);
+console.log('After revocation: ', resultAfterRevocation)
+```
+
+And now verification should fail for this credential!
+
+## Removing the registry
+A registry can be deleted leading to all the corresponding revocation ids being deleted as well. This requires the signature from owner like other updates. You can use the `dock.revocation.removeRegistry` method to remove a registry. To cleanup this example, define a method named `removeRegistry`:
+```javascript
+async function removeRegistry() {
+  console.log('Deleting registry...');
+  const lastModified = await dock.revocation.getBlockNoForLastChangeToRegistry(registryId);
+  await dock.revocation.removeRegistry(registryId, lastModified, didKeys);
+  console.log('Deleted registry');
+}
+```
+
+And then call it just before disconnecting from the node. Note that once deleted, any revocations made will now be invalid making previously revoked credentials unrevoked.

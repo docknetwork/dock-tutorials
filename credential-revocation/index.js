@@ -57,6 +57,14 @@ async function createRegistry() {
   console.log('Created registry');
 }
 
+// Method to create a new registry
+async function removeRegistry() {
+  console.log('Deleting registry...');
+  const lastModified = await dock.revocation.getBlockNoForLastChangeToRegistry(registryId);
+  await dock.revocation.removeRegistry(registryId, lastModified, didKeys);
+  console.log('Deleted registry');
+}
+
 async function revoke() {
   const revokeId = getDockRevIdFromCredential(credential);
   console.log('Trying to revoke id:', revokeId);
@@ -132,7 +140,10 @@ async function main() {
 
   // Verify the credential, it should fail
   const resultAfterRevocation = await credential.verify(verifyParams);
-  console.log('After revocation: ', resultAfterRevocation)
+  console.log('After revocation: ', resultAfterRevocation);
+
+  // Remove the registry
+  await removeRegistry();
 
   // Disconnect from the node
   await dock.disconnect();
