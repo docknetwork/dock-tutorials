@@ -27,11 +27,9 @@ const controllers = new Set();
 controllers.add(controllerDID);
 
 // Create a registry policy
-// TODO: comment and explain this further
 const policy = new OneOfPolicy(controllers);
 
 // Create revoke IDs
-// TODO: explain what are revoke IDs, how they relate to credentials in next tutorial
 const revokeId = randomAsHex(32);
 
 // Method from intro tutorial to connect to a node

@@ -26,7 +26,7 @@ async function connectToNode() {
 async function main() {
   // Connect to the node
   await connectToNode();
-  // TODO: methods go here
+  // ...
   await dock.disconnect();
 }
 
