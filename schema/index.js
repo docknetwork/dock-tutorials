@@ -73,7 +73,46 @@ async function main() {
   await schema.writeToChain(dock, pair);
 
   console.log(`Schema written, reading from chain (${schema.id})...`);
+  const result = await Schema.get(schema.id, dock);
+  console.log('Result from chain:', result);
 
+  console.log('Creating a verifiable credential and assigning its schema...');
+  const vc = VerifiableCredential.fromJSON(exampleCredential);
+  vc.setSchema(result.id, 'JsonSchemaValidator2018');
+
+  const universalResolverUrl = 'https://uniresolver.io';
+  const resolver = new UniversalResolver(universalResolverUrl);
+
+  console.log('Verifying the credential:', vc);
+  await vc.verify({
+    resolver,
+    compactProof: false,
+    forceRevocationCheck: false,
+    revocationApi: { dock },
+    schemaApi: { dock },
+  });
+
+  console.log('Credential verified, mutating the subject and trying again...');
+  vc.addSubject({
+    id: 'uuid:0x0',
+    thisWillFail: true,
+  });
+
+  try {
+    await vc.verify({
+      resolver,
+      compactProof: false,
+      forceRevocationCheck: false,
+      revocationApi: { dock },
+      schemaApi: { dock },
+    });
+    throw new Error('Verification succeeded, but it shouldn\'t have. This is a bug.');
+  } catch (e) {
+    console.log('Verification failed as expected:', e);
+  }
+
+  console.log('All done, disconnecting...');
+  await dock.disconnect();
 }
 
 main()

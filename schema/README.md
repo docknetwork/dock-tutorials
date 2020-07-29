@@ -54,5 +54,11 @@ Writing the schema is pretty simple, we just need to call the `writeToChain` met
 ```javascript
 console.log('Writing schema to the chain with blob id of', schema.id, '...');
 await schema.writeToChain(dock, pair);
+```
+
+You may wish to read the schema back from the chain after writing, typically to verify it was successful. You don't need to worry about reading schema from the chain when using the Dock SDK, as if a system requires it then it will be done behind the scenes. For examples sake, we can verify it was written like so:
+```javascript
 console.log(`Schema written, reading from chain (${schema.id})...`);
+const result = await Schema.get(schema.id, dock);
+console.log('Result from chain:', result);
 ```
