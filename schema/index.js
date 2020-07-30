@@ -88,7 +88,6 @@ async function main() {
     resolver,
     compactProof: false,
     forceRevocationCheck: false,
-    revocationApi: { dock },
     schemaApi: { dock },
   });
 
@@ -103,7 +102,6 @@ async function main() {
       resolver,
       compactProof: false,
       forceRevocationCheck: false,
-      revocationApi: { dock },
       schemaApi: { dock },
     });
     throw new Error('Verification succeeded, but it shouldn\'t have. This is a bug.');

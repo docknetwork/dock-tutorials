@@ -90,7 +90,6 @@ await vc.verify({
   resolver,
   compactProof: false,
   forceRevocationCheck: false,
-  revocationApi: { dock },
   schemaApi: { dock },
 });
 ```
@@ -111,7 +110,6 @@ try {
     resolver,
     compactProof: false,
     forceRevocationCheck: false,
-    revocationApi: { dock },
     schemaApi: { dock },
   });
   throw new Error('Verification succeeded, but it shouldn\'t have. This is a bug.');
