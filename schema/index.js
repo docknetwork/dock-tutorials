@@ -78,7 +78,7 @@ async function main() {
 
   console.log('Creating a verifiable credential and assigning its schema...');
   const vc = VerifiableCredential.fromJSON(exampleCredential);
-  vc.setSchema(result.id, 'JsonSchemaValidator2018');
+  vc.setSchema(schema.id, 'JsonSchemaValidator2018');
 
   const universalResolverUrl = 'https://uniresolver.io';
   const resolver = new UniversalResolver(universalResolverUrl);

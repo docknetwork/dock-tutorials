@@ -7,7 +7,9 @@ Data schemas serve a different purpose than that of the `@context` property in a
 neither enforces data structure or data syntax, nor enables the definition of arbitrary encodings to alternate
 representation formats.
 
-TODO: connect, write did etc
+Since schemas are stored on chain as a `Blob` in the Blob Storage module, the `Schema` class uses the `BlobModule`
+class internally. Schemas are identified and retrieved by their unique `blobId`, a 32 byte long hex string. As
+mentioned, the chain is agnostic to the contents of blobs and thus to schemas.
 
 ## Creating and writing schemas to chain
 First import the `Schema` class from `@docknetwork/sdk/modules/schema`:
@@ -61,4 +63,59 @@ You may wish to read the schema back from the chain after writing, typically to 
 console.log(`Schema written, reading from chain (${schema.id})...`);
 const result = await Schema.get(schema.id, dock);
 console.log('Result from chain:', result);
+```
+
+## Using schema with credentials
+Now we know how to create a schema object and write it to the chain, we need to understand how they relate to credentials.
+
+Construct a `VerifiableCredential` instance using the `fromJSON` and example VC like we did in the VC creation tutorial:
+
+```javascript
+console.log('Creating a verifiable credential and assigning its schema...');
+const vc = VerifiableCredential.fromJSON(exampleCredential);
+```
+
+We can the credential's schema using the `setSchema` method passing the schema's ID and type, in our case it would be `JsonSchemaValidator2018`:
+```javascript
+vc.setSchema(schema.id, 'JsonSchemaValidator2018');
+```
+
+Now that the schema's ID is set within the credential object, if you try to verify it then the verifier will read the schema JSON from chain and make sure that the credential conforms to it. Note that for the Dock SDK verifier to care about schemas in credentials, you must pass a `schemaApi` parameter. Internally this is used to query the chain, passing the `dock` API instance will use the Dock chain to lookup the schema. Add the following after creating the `vc` object:
+```javascript
+const universalResolverUrl = 'https://uniresolver.io';
+const resolver = new UniversalResolver(universalResolverUrl);
+
+console.log('Verifying the credential:', vc);
+await vc.verify({
+  resolver,
+  compactProof: false,
+  forceRevocationCheck: false,
+  revocationApi: { dock },
+  schemaApi: { dock },
+});
+```
+
+If the schema was defined and written properly then the credential should verify. But what if we mutate the credential in such a way that it no longer conforms to the schema? If we make the below change:
+```javascript
+console.log('Credential verified, mutating the subject and trying again...');
+vc.addSubject({
+  id: 'uuid:0x0',
+  thisWillFail: true,
+});
+```
+
+And then try to verify the credential again, it should fail:
+```javascript
+try {
+  await vc.verify({
+    resolver,
+    compactProof: false,
+    forceRevocationCheck: false,
+    revocationApi: { dock },
+    schemaApi: { dock },
+  });
+  throw new Error('Verification succeeded, but it shouldn\'t have. This is a bug.');
+} catch (e) {
+  console.log('Verification failed as expected:', e);
+}
 ```
