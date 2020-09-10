@@ -3,9 +3,9 @@
 [W3C spec](https://www.w3.org/TR/did-core) and verifiable credentials compliant with the [Verifiable Credentials Data Model 1.0](https://www.w3.org/TR/vc-data-model/). This SDK is meant to build client-side or server side javascript applications.
 
 # Installation
-Installation of the SDK is pretty simple, we use NPM and our source is also available at GitHub (links below). To install via NPM or Yarn, run either `npm install @docknetwork/sdk` or `yarn add @docknetwork/sdk` respectively. Once the package and dependencies are installed, you can import it like any ES6/CJS module. You can find the complete source at https://github.com/docknetwork/dock-tutorials
+Installation of the SDK is pretty simple, we use NPM and our source is also available at GitHub (links below). To install via NPM or Yarn, run either `npm install @docknetwork/sdk` or `yarn add @docknetwork/sdk` respectively. Once the package and dependencies are installed, you can import it like any ES6/CJS module. You can find the complete source for the SDK at https://github.com/docknetwork/sdk and the tutorials at https://github.com/docknetwork/dock-tutorials.
 
-# Imoorting
+# Importing
 In this tutorial series we will be using NodeJS with babel for ES6 support, however the same code should work in browsers too once it is transpiled. To begin with, we should import the Dock SDK. Importing the default reference will give us a DockAPI instance. With this we will communicate with the blockchain. You can also import the DockAPI class instanciate your own objects if you prefer. Simply do:
 ```javascript
 // Import the dock SDK
