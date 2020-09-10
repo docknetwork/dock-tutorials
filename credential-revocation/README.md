@@ -183,7 +183,9 @@ console.log('Credential created:', credential.toJSON());
 await signCredential();
 ```
 
-And then, taking cues from the verifiable credential tutorial we will construct a resolver and verify our credential. We need to pass a resolver for the DID we wrote, force the revocation check and pass our revocation API instance, which is the same as our Dock API instance since its resolved on the Dock chain:
+In order for the verifier to be able to check for revocations, an object must be passed named `revocationApi`. This object is a key/value pair where the key is the network name (for example, `dock`) and the value is the API instance. Currently, only the `dock` network and API is supported officially. However, you could write your own interface if you wish.
+
+So, taking cues from the verifiable credential tutorial we will construct a resolver and verify our credential. We need to pass a resolver for the DID we wrote, force the revocation check and pass the `revocationApi` property, which is the same as our Dock API instance since the revocation status is resolved on the Dock chain:
 ```javascript
 // Create a resolver in order to lookup DIDs for verifying
 const resolver = new DockResolver(dock);
