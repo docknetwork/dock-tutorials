@@ -8,8 +8,7 @@ neither enforces data structure or data syntax, nor enables the definition of ar
 representation formats.
 
 Since schemas are stored on chain as a `Blob` in the Blob Storage module, the `Schema` class uses the `BlobModule`
-class internally. Schemas are identified and retrieved by their unique `blobId`, a 32 byte long hex string. As
-mentioned, the chain is agnostic to the contents of blobs and thus to schemas.
+class internally. Schemas are identified and retrieved by their unique `blobId`, a fixed-length byte hex string. The length is defined in the blob module as `DockBlobIdByteSize`. Please note that the chain is agnostic to the contents of blobs and thus to schemas.
 
 ## Creating and writing schemas to chain
 First import the `Schema` class from `@docknetwork/sdk/modules/schema`:

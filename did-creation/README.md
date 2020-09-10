@@ -41,7 +41,7 @@ import {
 } from '@docknetwork/sdk/utils/misc';
 ```
 
-As mentioned above we need a Dock DID and a seed. The `dockDID` variable contains our new Dock DID, and the `keySeed` variable is our key's seed. Sr25519 keys use a 32-byte hex string. We will set these global variables below our import statements like so:
+As mentioned above we need a Dock DID and a seed. The `dockDID` variable contains our new Dock DID, and the `keySeed` variable is our key's seed. Sr25519 keys use a 32-byte hex string, so we will generate a random one for this tutorial. We will set these global variables below our import statements like so:
 ```javascript
 // DID will be generated randomly
 const dockDID = createNewDockDID();
