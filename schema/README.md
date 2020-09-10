@@ -65,9 +65,40 @@ console.log('Result from chain:', result);
 ```
 
 ## Using schema with credentials
-Now we know how to create a schema object and write it to the chain, we need to understand how they relate to credentials.
+Now we know how to create a schema object and write it to the chain, we need to understand how they relate to credentials. The [VCDM spec](https://www.w3.org/TR/vc-data-model/#data-schemas) specifies how the `credentialSchema` property should be used when present. Basically, once you've created and stored your Schema on chain, you can reference to it by its `blobId` when issuing a Verifiable Credential. Let's see an example:
+```javascript
+const dockApi = new DockAPI();
+const dockResolver = new DockResolver(dockApi);
 
-Construct a `VerifiableCredential` instance using the `fromJSON` and example VC like we did in the VC creation tutorial:
+let validCredential = new VerifiableCredential('https://example.com/credentials/123');
+validCredential.addContext('https://www.w3.org/2018/credentials/examples/v1');
+
+const ctx1 = {
+  '@context': {
+    emailAddress: 'https://schema.org/email',
+  },
+};
+
+validCredential.addContext(ctx1);
+validCredential.addType('AlumniCredential');
+validCredential.addSubject({
+  id: dockDID,
+  alumniOf: 'Example University',
+  emailAddress: 'john@gmail.com',
+ });
+
+validCredential.setSchema(blobHexIdToQualified(blobId), 'JsonSchemaValidator2018');
+
+await validCredential.sign(keyDoc);
+await validCredential.verify({
+  resolver: dockResolver,
+  compactProof: true,
+  forceRevocationCheck: false,
+  schemaApi: { dock: dockApi }
+});
+```
+
+Assuming that the `blobId` points to a valid schema, the verification above would fail if the `credentialSubject` in the Verifiable Credential didn't have one of the `alumniOf` or `emailAddress` properties. Now let's try to create our own schema and assign it to a credential in a valid manner. Construct a `VerifiableCredential` instance using the `fromJSON` and example VC like we did in the VC creation tutorial:
 
 ```javascript
 console.log('Creating a verifiable credential and assigning its schema...');
@@ -116,3 +147,8 @@ try {
   console.log('Verification failed as expected:', e);
 }
 ```
+
+### Schemas in Verifiable Presentations
+The current implementation does not specify a way to specify a schema for a Verifiable Presentation itself. However, a Verifiable Presentation may contain any number of Verifiable Credentials, each of which may or may not use a Schema themselves.
+
+The `verify` method for Verifiable Presentations will enforce a schema validation in each of the Verifiable Credentials contained in a presentation that are using the `credentialSchema` and `credentialSubject` properties simultaneously. This means that the verification of an otherwise valid Verifiable Presentation will fail if one of the Verifiable Credentials contained within it uses a Schema and fails to pass schema validation.
