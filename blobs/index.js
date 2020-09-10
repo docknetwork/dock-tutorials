@@ -8,19 +8,12 @@ import { DockBlobIdByteSize } from '@docknetwork/sdk/modules/blob';
 import { createNewDockDID, createKeyDetail, getHexIdentifierFromDID } from '@docknetwork/sdk/utils/did';
 import { getPublicKeyFromKeyringPair } from '@docknetwork/sdk/utils/misc';
 
-// Import some shared variables
-import { address, secretUri } from '../shared-constants';
+// Method from intro tutorial to connect to a node
+import { connectToNode } from '../intro/index';
 
 // Generate a DID to be used as author
 const dockDID = createNewDockDID();
 
-// Method from intro tutorial to connect to a node
-async function connectToNode() {
-  await dock.init({ address });
-  const account = dock.keyring.addFromUri(secretUri);
-  dock.setAccount(account);
-  console.log('Connected to the node and ready to go!');
-}
 
 async function writeBlob(blobValue, pair) {
   // Create a random blob ID for writing to chain

@@ -20,6 +20,9 @@ import {
 // Import some shared variables
 import { address, secretUri } from '../shared-constants';
 
+// Method from intro tutorial to connect to a node
+import { connectToNode } from '../intro/index';
+
 // Import the example VC
 import exampleVC from '../example-vc.json';
 
@@ -41,14 +44,6 @@ const didKeys = new KeyringPairDidKeys();
 
 // Create a registry policy using one of our controllers
 const policy = new OneOfPolicy([controllerDID]);
-
-// Method from intro tutorial to connect to a node
-async function connectToNode() {
-  await dock.init({ address });
-  const account = dock.keyring.addFromUri(secretUri);
-  dock.setAccount(account);
-  console.log('Connected to the node and ready to go!');
-}
 
 // Method to create a new registry
 async function createRegistry() {

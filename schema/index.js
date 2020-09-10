@@ -8,19 +8,11 @@ import { createNewDockDID, createKeyDetail, getHexIdentifierFromDID } from '@doc
 import { getPublicKeyFromKeyringPair } from '@docknetwork/sdk/utils/misc';
 import Schema from '@docknetwork/sdk/modules/schema';
 
-// Import some shared variables
-import { address, secretUri } from '../shared-constants';
+// Method from intro tutorial to connect to a node
+import { connectToNode } from '../intro/index';
 
 // Generate a DID to be used as author
 const dockDID = createNewDockDID();
-
-// Method from intro tutorial to connect to a node
-async function connectToNode() {
-  await dock.init({ address });
-  const account = dock.keyring.addFromUri(secretUri);
-  dock.setAccount(account);
-  console.log('Connected to the node and ready to go!');
-}
 
 async function writeAuthorDID(pair) {
   const publicKey = getPublicKeyFromKeyringPair(pair);

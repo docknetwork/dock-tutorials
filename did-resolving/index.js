@@ -24,8 +24,8 @@ import {
 // Import our custom resolver
 import EtherResolver from './ethr-resolver';
 
-// Import some shared variables
-import { address, secretUri } from '../shared-constants';
+// Method from intro tutorial to connect to a node
+import { connectToNode } from '../intro/index';
 
 // DID will be generated randomly
 const dockDID = createNewDockDID();
@@ -35,14 +35,6 @@ const keySeed = randomAsHex(32);
 
 // Define the universal resolver URL to ping
 const universalResolverUrl = 'https://uniresolver.io';
-
-// Method from intro tutorial to connect to a node
-async function connectToNode() {
-  await dock.init({ address });
-  const account = dock.keyring.addFromUri(secretUri);
-  dock.setAccount(account);
-  console.log('Connected to the node and ready to go!');
-}
 
 // Method to write the DID
 async function writeDID() {

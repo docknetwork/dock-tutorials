@@ -6,16 +6,8 @@ To begin with we will use some base code for connecting to the node:
 // Import the dock SDK and resolver
 import dock from '@docknetwork/sdk';
 
-// Import some shared variables
-import { address, secretUri } from '../shared-constants';
-
 // Method from intro tutorial to connect to a node
-async function connectToNode() {
-  await dock.init({ address });
-  const account = dock.keyring.addFromUri(secretUri);
-  dock.setAccount(account);
-  console.log('Connected to the node and ready to go!');
-}
+import { connectToNode } from '../intro/index';
 
 async function main() {
   // Connect to the node

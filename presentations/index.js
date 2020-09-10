@@ -20,8 +20,8 @@ import {
 // Import some utils from Polkadot JS
 import { randomAsHex } from '@polkadot/util-crypto';
 
-// Import some shared variables
-import { address, secretUri } from '../shared-constants';
+// Method from intro tutorial to connect to a node
+import { connectToNode } from '../intro/index';
 
 // Import the example VC
 import exampleVC from '../example-vc.json';
@@ -33,14 +33,6 @@ console.log('Credential created:', credential.toJSON());
 // Create random issuer DID and seed to sign with
 const issuerDID = createNewDockDID();
 const issuerSeed = randomAsHex(32);
-
-// Method from intro tutorial to connect to a node
-async function connectToNode() {
-  await dock.init({ address });
-  const account = dock.keyring.addFromUri(secretUri);
-  dock.setAccount(account);
-  console.log('Connected to the node and ready to go!');
-}
 
 // Register issuer DID
 async function registerIssuerDID() {

@@ -27,7 +27,7 @@ export const secretUri = '//Alice'; // Account secret in uri format, we will use
 # Connecting to a node
 With the required packages and variables imported, we can go ahead and connect to our node. If you don't have a local testnet running alraedy, go to https://github.com/docknetwork/dock-substrate and follow the steps in the readme to start one. You could use the Dock testnet given a proper account with enough funds. First, create a method named `connectToNode` with an empty body for now:
 ```javascript
-async function connectToNode() {
+export async function connectToNode() {
 
 }
 ```

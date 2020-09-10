@@ -4,7 +4,7 @@ import dock from '@docknetwork/sdk';
 // Import some shared variables
 import { address, secretUri } from '../shared-constants';
 
-async function connectToNode() {
+export async function connectToNode() {
   // Initialize the SDK and connect to the node
   await dock.init({ address });
 

@@ -16,8 +16,8 @@ import {
   getPublicKeyFromKeyringPair,
 } from '@docknetwork/sdk/utils/misc';
 
-// Import some shared variables
-import { address, secretUri } from '../shared-constants';
+// Method from intro tutorial to connect to a node
+import { connectToNode } from '../intro/index';
 
 // DID will be generated randomly
 const dockDID = createNewDockDID();
@@ -27,14 +27,6 @@ const keySeed = randomAsHex(32);
 
 // Generate second key (for update) with this seed. The key type is Ed25519
 const secondKeySeed = randomAsHex(32);
-
-// Method from intro tutorial to connect to a node
-async function connectToNode() {
-  await dock.init({ address });
-  const account = dock.keyring.addFromUri(secretUri);
-  dock.setAccount(account);
-  console.log('Connected to the node and ready to go!');
-}
 
 // Method to write the DID
 async function writeDID() {

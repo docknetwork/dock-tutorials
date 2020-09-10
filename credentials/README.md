@@ -181,12 +181,7 @@ const issuerDID = createNewDockDID();
 const issuerSeed = randomAsHex(32);
 
 // Method from intro tutorial to connect to a node
-async function connectToNode() {
-  await dock.init({ address });
-  const account = dock.keyring.addFromUri(secretUri);
-  dock.setAccount(account);
-  console.log('Connected to the node and ready to go!');
-}
+import { connectToNode } from '../intro/index';
 
 // Register issuer DID
 async function registerIssuerDID() {
