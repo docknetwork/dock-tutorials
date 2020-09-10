@@ -2,23 +2,19 @@ import { randomAsHex } from '@polkadot/util-crypto';
 
 import dock from '@docknetwork/sdk';
 import { createNewDockDID, createKeyDetail } from '@docknetwork/sdk/utils/did';
-import { buildDockCredentialStatus } from '@docknetwork/sdk/utils/vc';
+import {
+  buildDockCredentialStatus,
+  getDockRevIdFromCredential,
+} from '@docknetwork/sdk/utils/vc';
 import { getPublicKeyFromKeyringPair } from '@docknetwork/sdk/utils/misc';
 import VerifiableCredential from '@docknetwork/sdk/verifiable-credential';
 import { DockResolver } from '@docknetwork/sdk/resolver';
 import getKeyDoc from '@docknetwork/sdk/utils/vc/helpers';
 
 import {
-  getDockRevIdFromCredential
-} from '@docknetwork/sdk/utils/vc';
-
-import {
   OneOfPolicy,
   KeyringPairDidKeys, createRandomRegistryId,
 } from '@docknetwork/sdk/utils/revocation';
-
-// Import some shared variables
-import { address, secretUri } from '../shared-constants';
 
 // Method from intro tutorial to connect to a node
 import { connectToNode } from '../intro/index';
@@ -35,9 +31,6 @@ const registryId = createRandomRegistryId();
 // Create a new controller DID, the DID will be registered on the network and own the registry
 const controllerDID = createNewDockDID();
 const controllerSeed = randomAsHex(32);
-
-// Create a registry policy
-const policy = new OneOfPolicy([controllerDID]);
 
 // Create a did/keypair proof map
 const didKeys = new KeyringPairDidKeys();
@@ -64,6 +57,7 @@ async function revoke() {
   const revokeId = getDockRevIdFromCredential(credential);
   console.log('Trying to revoke id:', revokeId);
   await dock.revocation.revokeCredential(didKeys, registryId, revokeId);
+  return revokeId;
 }
 
 async function createControllerDID() {
@@ -123,15 +117,15 @@ async function main() {
     resolver,
     compactProof: true,
     forceRevocationCheck: true,
-    revocationApi: { dock }
+    revocationApi: { dock },
   };
 
   // Verify the credential, it should succeed
   const resultBeforeRevocation = await credential.verify(verifyParams);
-  console.log('Before revocation: ', resultBeforeRevocation)
+  console.log('Before revocation: ', resultBeforeRevocation);
 
   // Revoke the credential, next verify attempt will fail
-  await revoke();
+  const revokeId = await revoke();
 
   // Check if revoked
   const isRevoked = await dock.revocation.getIsRevoked(registryId, revokeId);

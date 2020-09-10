@@ -60,7 +60,7 @@ async function main() {
   await signCredential();
 
   // Create presentation and add credential
-	const presentation = new VerifiablePresentation('http://example.edu/credentials/2803');
+  const presentation = new VerifiablePresentation('http://example.edu/credentials/2803');
 
   // You can add as many credentials as needed,
   // we will use just one here

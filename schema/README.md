@@ -72,7 +72,7 @@ Construct a `VerifiableCredential` instance using the `fromJSON` and example VC 
 
 ```javascript
 console.log('Creating a verifiable credential and assigning its schema...');
-const vc = VerifiableCredential.fromJSON(exampleCredential);
+const vc = VerifiableCredential.fromJSON(exampleVC);
 ```
 
 We can the credential's schema using the `setSchema` method passing the schema's ID and type, in our case it would be `JsonSchemaValidator2018`:

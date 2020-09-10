@@ -1,15 +1,19 @@
 // Import some helper methods from polkadot utilities
 import { randomAsHex } from '@polkadot/util-crypto';
-import { u8aToString } from '@polkadot/util';
 
 // Import the dock SDK and resolver
 import dock from '@docknetwork/sdk';
-import { createNewDockDID, createKeyDetail, getHexIdentifierFromDID } from '@docknetwork/sdk/utils/did';
+import { createNewDockDID, createKeyDetail } from '@docknetwork/sdk/utils/did';
 import { getPublicKeyFromKeyringPair } from '@docknetwork/sdk/utils/misc';
 import Schema from '@docknetwork/sdk/modules/schema';
+import VerifiableCredential from '@docknetwork/sdk/verifiable-credential';
+import { UniversalResolver } from '@docknetwork/sdk/resolver';
 
 // Method from intro tutorial to connect to a node
 import { connectToNode } from '../intro/index';
+
+// Import the example VC
+import exampleVC from '../example-vc.json';
 
 // Generate a DID to be used as author
 const dockDID = createNewDockDID();
@@ -69,7 +73,7 @@ async function main() {
   console.log('Result from chain:', result);
 
   console.log('Creating a verifiable credential and assigning its schema...');
-  const vc = VerifiableCredential.fromJSON(exampleCredential);
+  const vc = VerifiableCredential.fromJSON(exampleVC);
   vc.setSchema(schema.id, 'JsonSchemaValidator2018');
 
   const universalResolverUrl = 'https://uniresolver.io';

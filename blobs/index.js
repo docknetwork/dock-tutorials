@@ -14,7 +14,6 @@ import { connectToNode } from '../intro/index';
 // Generate a DID to be used as author
 const dockDID = createNewDockDID();
 
-
 async function writeBlob(blobValue, pair) {
   // Create a random blob ID for writing to chain
   const id = randomAsHex(DockBlobIdByteSize);
@@ -62,7 +61,7 @@ async function main() {
 
   // Write blob as JSON
   const blobValueJSON = {
-    myJsonObject: 'hello!'
+    myJsonObject: 'hello!',
   };
   const blobIdJSON = await writeBlob(blobValueJSON, pair);
   const chainBlobJSON = await dock.blob.get(blobIdJSON);
