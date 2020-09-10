@@ -105,7 +105,7 @@ Note that when passing the author parameter, the DID must be in hex format. This
 If you run the code it should write without giving you errors. However, we need to confirm that it is written correctly by trying to read it back from the chain.
 
 # Reading blobs from the chain
-Reading blobs is pretty simple, it requires nothing but a node connection and a valid blob ID. Simply call `dock.blob.get` passing the ID and it will return a tuple with the second element being the blob value in u8a format. In our main method, below calling writeBlob, add the following:
+Reading blobs is pretty simple, it requires nothing but a node connection and a valid blob ID. Simply call `dock.blob.get` passing the ID and it will return a tuple with the second element being the blob value in Uint8Array format. In our main method, below calling writeBlob, add the following:
 ```javascript
   const chainBlob = await dock.blob.get(blobId);
 ```
