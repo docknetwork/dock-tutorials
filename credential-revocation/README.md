@@ -203,6 +203,8 @@ const resultBeforeRevocation = await credential.verify(verifyParams);
 console.log('Before revocation: ', resultBeforeRevocation)
 ```
 
+Note that here we are specifying that the proof is compacted and that we should force a revocation check. Setting `forceRevocationCheck` to `false` can allow false positives when verifying revocable credentials, so we ensure that we are checking it. This also requires that we pass a `revocationApi` object, otherwise the method will throw an error.
+
 On running the code, the credential should be verified successfully. Now we can revoke the credential and try to verify again:
 ```javascript
 // Revoke the credential, next verify attempt will fail
