@@ -2,7 +2,6 @@
   "name": "dock-tutorials",
   "version": "0.0.1",
   "description": "Corresponding tutorial code for the Dock SDK tutorial series",
-  "type": "module",
   "scripts": {
     "lint": "eslint \"**/*.js\"",
     "tutorial-01": "npx babel-node intro/index.js",
