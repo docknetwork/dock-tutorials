@@ -1,6 +1,8 @@
 # Intro
-[Dock](https://dock.io) is a blockchain built using [Substrate](https://www.parity.io/substrate/) and uses [polkadot-js](https://github.com/polkadot-js/) for interacting with the chain. The current version of Dock supports creating and managing DIDs compliant with the
-[W3C spec](https://www.w3.org/TR/did-core) and verifiable credentials compliant with the [Verifiable Credentials Data Model 1.0](https://www.w3.org/TR/vc-data-model/). This SDK is meant to build client-side or server side javascript applications.
+[Dock](https://dock.io) is a blockchain built using [Substrate](https://www.parity.io/substrate/) to facilitate the use of [Verifiable Credentials Data Model 1.0](https://www.w3.org/TR/vc-data-model/) compliant documents, creating/managing [W3C spec](https://www.w3.org/TR/did-core) compliant DIDs and more. The client SDK contains a library and tooling to interact with the Dock chain and also other things such as verifying and issuing credentials.
+
+# Pre-requisites for these tutorials
+For these tutorials we will be a running our own local development node. Instructions to do this can be found at the [dock substrate repository](https://github.com/docknetwork/dock-substrate). Once you have followed the instructions and have your local node running, you can continue. Please note that you don't always need a node to use the Dock SDK, but certain features rely on it.
 
 # Installation
 Installation of the SDK is pretty simple, we use NPM and our source is also available at GitHub (links below). To install via NPM or Yarn, run either `npm install @docknetwork/sdk` or `yarn add @docknetwork/sdk` respectively. Once the package and dependencies are installed, you can import it like any ES6/CJS module. You can find the complete source for the SDK at https://github.com/docknetwork/sdk and the tutorials at https://github.com/docknetwork/dock-tutorials.
