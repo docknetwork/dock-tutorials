@@ -1,5 +1,5 @@
 # Intro
-[Dock](https://dock.io) is a blockchain built using [Substrate](https://www.parity.io/substrate/) to facilitate the use of [Verifiable Credentials Data Model 1.0](https://www.w3.org/TR/vc-data-model/) compliant documents, creating/managing [W3C spec](https://www.w3.org/TR/did-core) compliant DIDs and more. The client SDK contains a library and tooling to interact with the Dock chain and also other things such as verifying and issuing credentials.
+[Dock](https://dock.io) is a blockchain built using [Substrate](https://www.parity.io/substrate/) to facilitate the use of [Verifiable Credentials Data Model 1.0](https://www.w3.org/TR/vc-data-model/) compliant documents, creating/managing [W3C spec](https://www.w3.org/TR/did-core) compliant DIDs and more. The client SDK contains a library and tooling to interact with the Dock chain and also other things such as verifying and issuing credentials. View the video verison of this tutorial here: https://www.youtube.com/watch?v=jvgn9oSXBDQ 
 
 # Pre-requisites for these tutorials
 For these tutorials we will be a running our own local development node. Instructions to do this can be found at the [dock substrate repository](https://github.com/docknetwork/dock-substrate). Once you have followed the instructions and have your local node running, you can continue. Please note that you don't always need a node to use the Dock SDK, but certain features rely on it.
@@ -57,3 +57,49 @@ console.log('Connected to the node and ready to go!');
 ```
 
 If all has gone well, you should be able to run this script and see that you are connected to the node. If any errors occur, the promise will fail and they will be outputted to the console.
+
+# Basic usage
+To construct your own API object, once the SDK has been installed, import the Dock API object as
+```js
+import { DockAPI } from '@docknetwork/sdk/api';
+const dock = new DockAPI();
+```
+
+To make the API object connect to the node call `init` method. This method accepts the Websocket RPC endpoint of the node is
+needed. Say you have it in `address`. It also accepts a Polkadot-js keyring as well.
+```js
+await dock.init({ address, keyring });
+```
+
+To disconnect from the node
+```js
+await dock.disconnect();
+```
+
+To set the account used in sending the transaction and pay fees, call `setAccount` with the polkadot-js `account`
+```js
+// the `account` object might have been generated as
+const account = dock.keyring.addFromUri(secretURI);
+// Set the account to pay fees for transactions
+dock.setAccount(account);
+```
+
+To get the account, call `getAccount`
+```js
+dock.getAccount();
+```
+
+To send a transaction, use the `signAndSend` on the `DockAPI` object
+```js
+const res = await dock.signAndSend(transaction);
+```
+
+For interacting with the DID module, i.e. creating, updating and removing them, get the `didModule` with `did` getter
+```js
+const didModule = dock.did;
+```
+
+Similarly, for the revocation module, get the `revocationModule` with `revocation` getter
+```js
+const revocationModule = dock.revocation;
+```
