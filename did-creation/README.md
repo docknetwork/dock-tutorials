@@ -25,7 +25,7 @@ main()
   .then(() => process.exit(0));
 ```
 
-Now we need to import some helper methods so we can write DIDs from the SDK. We will also import the `randomAsHex` method from Polkadot to give us a random hex string for seeds. From the SDK we need to use the `createNewDockDID` which will generate a new, random Dock DID. The `createKeyDetail` is then used along with a valid Sr25519 key to write the DID to chain with controller information. In this example, the controller is the same as the DID. The `getPublicKeyFromKeyringPair` will take a keypair object and return its public key. Import methods as follows:
+Now we need to import some helper methods so we can write DIDs to the chain. From the SDK we need to use the `createNewDockDID` method which will generate a new, random Dock DID. The `createKeyDetail` is then used along with a valid Sr25519 key to write the DID to chain with controller information. We use Polkadot's `randomAsHex` method to generate a development account seed. In this example, the controller is the same as the DID. The `getPublicKeyFromKeyringPair` will take a keypair object and return its public key. Import methods as follows:
 ```javascript
 // Import some utils from Polkadot JS
 import { randomAsHex } from '@polkadot/util-crypto';
