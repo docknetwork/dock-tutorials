@@ -54,7 +54,7 @@ Now we need to create a method that will write the DID to the chain. Create a ne
 ```javascript
 // Method to write the DID
 async function writeDID() {
-
+  console.log('Registering DID:', dockDID);
 }
 ```
 
