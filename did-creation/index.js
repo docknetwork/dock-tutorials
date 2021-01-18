@@ -31,6 +31,7 @@ const secondKeySeed = randomAsHex(32);
 // Method to write the DID
 async function writeDID() {
   // Generate keys for the DID.
+  console.log('Registering DID:', dockDID)
   const keyPair = dock.keyring.addFromUri(keySeed, null, 'sr25519');
   const publicKey = getPublicKeyFromKeyringPair(keyPair);
 
