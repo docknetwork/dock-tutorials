@@ -9,7 +9,7 @@ To begin with, we need to define a few imports and connect to a node. However, t
 // Import some utils from Polkadot JS
 import { randomAsHex } from '@polkadot/util-crypto';
 
-// Import the dock SDK and resolver
+// Import the Dock SDK
 import dock from '@docknetwork/sdk';
 
 // Method from intro tutorial to connect to a node

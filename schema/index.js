@@ -1,7 +1,7 @@
 // Import some helper methods from polkadot utilities
 import { randomAsHex } from '@polkadot/util-crypto';
 
-// Import the dock SDK and resolver
+// Import the Dock SDK
 import dock from '@docknetwork/sdk';
 import { createNewDockDID, createKeyDetail } from '@docknetwork/sdk/utils/did';
 import { getPublicKeyFromKeyringPair } from '@docknetwork/sdk/utils/misc';

@@ -6,7 +6,7 @@ Blobs are simply binary objects stored on chain that can be written, retrieved a
 
 We have covered writing and resolving DIDs in a previous tutorial, so if you are still unsure what this means or how to do it please refer to the DID creation tutorial. To begin with, we need to define a few imports and connect to a node. Start with a base script like we have in other tutorials to connect to a node:
 ```javascript
-// Import the dock SDK and resolver
+// Import the Dock SDK
 import dock from '@docknetwork/sdk';
 
 // Method from intro tutorial to connect to a node

@@ -9,7 +9,7 @@ The chain-state stores a few things for a DID, the current public key, the contr
 # Writing DIDs to the chain
 To begin with, we need to define a few imports and connect to a node. Start with a base script like we have in other tutorials to connect to a node:
 ```javascript
-// Import the dock SDK and resolver
+// Import the Dock SDK
 import dock from '@docknetwork/sdk';
 
 // Method from intro tutorial to connect to a node

@@ -3,7 +3,7 @@ Credential revocation is managed with on-chain revocation registries. To revoke 
 
 To begin with we will use some base code for connecting to the node:
 ```javascript
-// Import the dock SDK and resolver
+// Import the Dock SDK
 import dock from '@docknetwork/sdk';
 
 // Method from intro tutorial to connect to a node

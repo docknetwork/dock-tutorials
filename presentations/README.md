@@ -40,7 +40,7 @@ Once your Verifiable Presentation has been initialized, you can proceed to use t
 import VerifiableCredential from '@docknetwork/sdk/verifiable-credential';
 import VerifiablePresentation from '@docknetwork/sdk/verifiable-presentation';
 
-// Import the dock SDK and resolver
+// Import the Dock SDK
 import dock from '@docknetwork/sdk';
 import { DockResolver } from '@docknetwork/sdk/resolver';
 import getKeyDoc from '@docknetwork/sdk/utils/vc/helpers';

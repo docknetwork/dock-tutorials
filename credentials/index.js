@@ -1,7 +1,7 @@
 // Import the VerifiableCredential class
 import VerifiableCredential from '@docknetwork/sdk/verifiable-credential';
 
-// Import the dock SDK and resolver
+// Import the Dock SDK
 import dock from '@docknetwork/sdk';
 import { DockResolver } from '@docknetwork/sdk/resolver';
 import getKeyDoc from '@docknetwork/sdk/utils/vc/helpers';

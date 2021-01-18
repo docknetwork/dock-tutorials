@@ -2,7 +2,7 @@
 import { randomAsHex } from '@polkadot/util-crypto';
 import { u8aToString } from '@polkadot/util';
 
-// Import the dock SDK and resolver
+// Import the Dock SDK
 import dock from '@docknetwork/sdk';
 import { DockBlobIdByteSize } from '@docknetwork/sdk/modules/blob';
 import { createNewDockDID, createKeyDetail, getHexIdentifierFromDID } from '@docknetwork/sdk/utils/did';
