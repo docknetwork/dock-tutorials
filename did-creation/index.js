@@ -17,7 +17,7 @@ import {
 } from '@docknetwork/sdk/utils/misc';
 
 // Method from intro tutorial to connect to a node
-import { connectToNode } from '../intro/index';
+import { connectToNode } from '../shared-constants';
 
 // DID will be generated randomly
 const dockDID = createNewDockDID();
@@ -31,7 +31,7 @@ const secondKeySeed = randomAsHex(32);
 // Method to write the DID
 async function writeDID() {
   // Generate keys for the DID.
-  console.log('Registering DID:', dockDID)
+  console.log('Registering DID:', dockDID);
   const keyPair = dock.keyring.addFromUri(keySeed, null, 'sr25519');
   const publicKey = getPublicKeyFromKeyringPair(keyPair);
 
