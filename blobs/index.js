@@ -9,7 +9,7 @@ import { createNewDockDID, createKeyDetail, getHexIdentifierFromDID } from '@doc
 import { getPublicKeyFromKeyringPair } from '@docknetwork/sdk/utils/misc';
 
 // Method from intro tutorial to connect to a node
-import { connectToNode } from '../intro/index';
+import { connectToNode } from '../shared-constants';
 
 // Generate a DID to be used as author
 const dockDID = createNewDockDID();

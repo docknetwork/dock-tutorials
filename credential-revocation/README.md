@@ -7,7 +7,7 @@ To begin with we will use some base code for connecting to the node:
 import dock from '@docknetwork/sdk';
 
 // Method from intro tutorial to connect to a node
-import { connectToNode } from '../intro/index';
+import { connectToNode } from '../shared-constants';
 
 async function main() {
   // Connect to the node

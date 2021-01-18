@@ -13,7 +13,7 @@ import { randomAsHex } from '@polkadot/util-crypto';
 import dock from '@docknetwork/sdk';
 
 // Method from intro tutorial to connect to a node
-import { connectToNode } from '../intro/index';
+import { connectToNode } from '../shared-constants';
 
 async function main() {
   // Connect to the node

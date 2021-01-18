@@ -181,7 +181,7 @@ const issuerDID = createNewDockDID();
 const issuerSeed = randomAsHex(32);
 
 // Method from intro tutorial to connect to a node
-import { connectToNode } from '../intro/index';
+import { connectToNode } from '../shared-constants';
 
 // Register issuer DID
 async function registerIssuerDID() {

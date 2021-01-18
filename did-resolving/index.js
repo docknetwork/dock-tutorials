@@ -25,7 +25,7 @@ import {
 import EtherResolver from './ethr-resolver';
 
 // Method from intro tutorial to connect to a node
-import { connectToNode } from '../intro/index';
+import { connectToNode } from '../shared-constants';
 
 // DID will be generated randomly
 const dockDID = createNewDockDID();

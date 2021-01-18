@@ -10,7 +10,7 @@ import VerifiableCredential from '@docknetwork/sdk/verifiable-credential';
 import { UniversalResolver } from '@docknetwork/sdk/resolver';
 
 // Method from intro tutorial to connect to a node
-import { connectToNode } from '../intro/index';
+import { connectToNode } from '../shared-constants';
 
 // Import the example VC
 import exampleVC from '../example-vc.json';

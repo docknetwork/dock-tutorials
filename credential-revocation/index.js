@@ -17,7 +17,7 @@ import {
 } from '@docknetwork/sdk/utils/revocation';
 
 // Method from intro tutorial to connect to a node
-import { connectToNode } from '../intro/index';
+import { connectToNode } from '../shared-constants';
 
 // Import the example VC
 import exampleVC from '../example-vc.json';

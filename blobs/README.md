@@ -10,7 +10,7 @@ We have covered writing and resolving DIDs in a previous tutorial, so if you are
 import dock from '@docknetwork/sdk';
 
 // Method from intro tutorial to connect to a node
-import { connectToNode } from '../intro/index';
+import { connectToNode } from '../shared-constants';
 
 async function main() {
   // Connect to the node

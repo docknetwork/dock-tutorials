@@ -13,7 +13,7 @@ To begin with, we need to define a few imports and connect to a node. Start with
 import dock from '@docknetwork/sdk';
 
 // Method from intro tutorial to connect to a node
-import { connectToNode } from '../intro/index';
+import { connectToNode } from '../shared-constants';
 
 async function main() {
   await connectToNode();
