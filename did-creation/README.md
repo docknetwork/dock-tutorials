@@ -1,5 +1,7 @@
 # Introduction to DIDs
-DIDs in Dock are created by choosing a 32 byte unique (on Dock chain) identifier along with a public key. The public key can be changed by providing a signature with the currently active key. The DID can also be removed by providing a signature with the currently active key. As of now, a DID can have only one key at a time.
+Decentralized identifiers (DIDs) are a new type of identifier that enables verifiable, decentralized digital identity. A DID identifies any subject that the controller of the DID decides that it identifies.
+
+In the Dock SDK DIDs are created by choosing a 32 byte unique (on Dock chain) identifier along with a controller public key. The public key can be changed and the DID can be removed by providing a controller signature. As of now, a DID can have only one key at a time.
 
 The chain-state stores a few things for a DID, the current public key, the controller and the block number when the DID was last updated for replay protection. In order to write a DID, we need:
 - To be connected to the node
