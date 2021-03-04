@@ -63,14 +63,6 @@ async function resolveDIDWithResolver(did) {
   await resolve(resolver, did);
 }
 
-// Method to resolve using the universal resolver
-async function resolveWithUniversalResolver(did) {
-  console.log('Creating and resolving with a UniversalResolver');
-  // Create a universal resolver instance, does not need an initialized SDK
-  const resolver = new UniversalResolver(universalResolverUrl);
-  await resolve(resolver, did);
-}
-
 // Method to resolve using the multi resolver
 async function resolveWithMultiResolver(did) {
   console.log('Creating and resolving with a MultiResolver');
@@ -103,7 +95,6 @@ async function main() {
   await connectToNode();
   await writeDID();
   await resolveDIDWithResolver(dockDID);
-  await resolveWithUniversalResolver('did:github:gjgd');
   await resolveWithMultiResolver(dockDID);
   await resolveDIDWithEthrResolver('did:ethr:0xabcabc03e98e0dc2b855be647c39abe984193675');
   await dock.disconnect();

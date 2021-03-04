@@ -103,36 +103,9 @@ async function main() {
 }
 ```
 
-But what if the DID is not on the Dock chain? We can't ensure that all credentials we want to verify or schemas we want to lookup have Dock DIDs on the chain. For that we have a class named `UniversalResolver`. It is constructed with a URL that will point to a service, such as `uniresolver.io`, and on resolving it will submit a HTTP request to get the DID document. We can define a new method to construct and call this resolver:
-```javascript
-// Method to resolve using the universal resolver
-async function resolveWithUniversalResolver(did) {
-  console.log('Creating and resolving with a UniversalResolver');
+But what if the DID is not on the Dock chain? We can't ensure that all credentials we want to verify or schemas we want to lookup have Dock DIDs on the chain. For that we have a class named `UniversalResolver`. It is constructed with a URL that will point to a service, such as `uniresolver.io`, and on resolving it will submit a HTTP request to get the DID document. For interopability, you can construct a `UniversalResolver` instance to resolve many different chain DIDs.
 
-  // Create a universal resolver instance, does not need an initialized SDK
-  const resolver = new UniversalResolver(universalResolverUrl);
-  await resolve(resolver, did);
-}
-```
-
-We should also define the global variable `universalResolverUrl` alongside `dockDID` so we can access it in other methods later:
-```javascript
-// Define the universal resolver URL to ping
-const universalResolverUrl = 'https://uniresolver.io';
-```
-
-Now if we update our `main` method to call `resolveWithUniversalResolver` supplying an external DID, such as `did:github:gjgd`, we should be able to resolve it:
-```javascript
-async function main() {
-  await connectToNode();
-  await writeDID();
-  await resolveDIDWithResolver(dockDID);
-  await resolveWithUniversalResolver('did:github:gjgd');
-  await dock.disconnect();
-}
-```
-
-We've learned so far how to query the node we are connected to and the universal resolver, but what if we want to support multiple DID types in one action? Well, we can do that with the `MultiResolver` class. You can import it from `@docknetwork/sdk/resolver` like the other resolvers. Once that is done declare a method named `resolveWithMultiResolver` with one argument `did`:
+So we can query a DID for the connected node, and to the universal DID resolver, but what if we want to do both and the node isnt on the universal resolver? Well, we can do that with the `MultiResolver` class. You can import it from `@docknetwork/sdk/resolver` like the other resolvers. Once that is done declare a method named `resolveWithMultiResolver` with one argument `did`:
 ```javascript
 // Method to resolve using the multi resolver
 async function resolveWithMultiResolver(did) {
@@ -146,6 +119,7 @@ Within the body of that method we are going to need to setup at least a `DockRes
 const dockResolver = new DockResolver(dock);
 
 // Create a universal resolver, used as a fallback if no resolver is found in the list
+const universalResolverUrl = 'https://uniresolver.io';
 const uniResolver = new UniversalResolver(universalResolverUrl);
 ```
 
