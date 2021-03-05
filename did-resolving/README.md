@@ -18,7 +18,7 @@ import { connectToNode } from '../shared-constants';
 async function main() {
   // Connect to the node
   await connectToNode();
-  // ...
+  writeDID();
   await dock.disconnect();
 }
 
@@ -60,7 +60,7 @@ async function writeDID() {
 
 If you run the code it should successfully write a DID to the chain. Next up, we should try to resolve it. There are two ways we can read a DID back from the Dock chain. The simplest way is to call the `getDocument` method of the DID module like so:
 ```javascript
-const document = await dock.did.getDocument(did);
+const document = await dock.did.getDocument(dockDID);
 ```
 
 This way can be useful if you only need to resolve DIDs from the Dock chain and don't need to interop with other areas of the SDK such as credential/presentation verification. The preferred way is to define a DID resolver instance, as it has a common interface to get a DID document and can support multiple chains and the universal DID resolver. When resolving DIDs for the purposes of verification, the SDK expects a resolver instance. Let's define a method that will call the resolver's `resolve` method to return a DID document:
