@@ -1,10 +1,10 @@
 # Resolving DIDs
-DIDs are no good being written to the chain and not being able to read it back, so we need a way to resolve DIDs in order to perform verification with them. DIDs can be resolved either by:
+In the last tutorial we learned how to write a DID to the chain. However DIDs are no good being written to the chain and not being able to read it back, so we need a way to resolve DIDs in order to perform verification with them. DIDs can be resolved either by:
 - Querying the Dock chain
 - Submitting a HTTP request to the universal DID resolver
 - Or a custom, user-defined resolver.
 
-To begin with, we need to define a few imports and connect to a node. However, this is only because we will be writing a Dock DID and querying form the chain. If you don't need direct chain access, you don't need to connect to a node and can use the universal resolver or your own class. Start with a base script like we have in other tutorials to connect to a node:
+To begin with, we need to define a few imports and connect to a node. However, this is only because we will be writing a Dock DID and querying from the chain. If you don't need direct chain access, you don't need to connect to a node and can use the universal resolver or your own class. Start with a base script like we have in other tutorials to connect to a node:
 ```javascript
 // Import some utils from Polkadot JS
 import { randomAsHex } from '@polkadot/util-crypto';
@@ -26,7 +26,7 @@ main()
   .then(() => process.exit(0));
 ```
 
-Taking some code from the DID creation tutorial, we will define a method to write a DID to the chain, import some helper methods and define
+And then taking some code from the DID creation tutorial, we will define a method to write a DID to the chain, import some helper methods and define
 two variables `dockDID` and `keySeed`. The `writeDID` method will be called in `main` below `connectToNode`:
 ```javascript
 // Import some helper methods from the SDK
@@ -73,7 +73,7 @@ async function resolve(resolver, did) {
 }
 ```
 
-The above method will take a resolver object and a DID string, calling `resolve` will return the DID document as JSON. The first resolver we will use is the `DockResolver`. This class will take a Dock API instance and read from the chain, calling `dock.did.getDocument` internally. We can import `DockResolver` from `@docknetwork/sdk/resolver` like so:
+This method will take a resolver object and a DID string, calling `resolve` will return the DID document as JSON. The first resolver we will use is the `DockResolver`. This class will take a Dock API instance and read from the chain, calling `dock.did.getDocument` internally. We can import `DockResolver` from `@docknetwork/sdk/resolver` like so:
 ```javascript
 // Import the resolvers
 import {
